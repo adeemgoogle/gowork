@@ -11,32 +11,36 @@ import (
 )
 
 type Current struct {
-	IdCurrent             int                   `json:"id"`
+	IdCurrent             int                   `json:"id" gorm:"primaryKey"`
 	NameCurrent           string                `json:"name"`
-	WeathersCurrent       []WeathersCurrent     `json:"weather"`
-	MainParametersCurrent MainParametersCurrent `json:"main"`
-	WindCurrnet           WindCurrnet           `json:"wind"`
-	InfoSunCurrent        InfoSunCurrent        `json:"sys"`
+	WeathersCurrent       []WeathersCurrent     `json:"weather" gorm:"foreignKey:Weather"`
+	MainParametersCurrent MainParametersCurrent `json:"main" gorm:"foreignKey: CurrentID"`
+	WindCurrnet           WindCurrnet           `json:"wind" gorm:"foreignKey: WindSpeed"`
+	InfoSunCurrent        InfoSunCurrent        `json:"sys" gorm:"foreignKey:SunsetID"`
 	TimeZone              int64                 `json:"timezone"`
-	CloudsCurrent         CloudsCurrent         `json:"clouds"`
+	CloudsCurrent         CloudsCurrent         `json:"clouds" gorm:"foreignKey: CloudsId"`
 	Visibility            int                   `json:"visibility"`
 }
+
 type CloudsCurrent struct {
+	CloudsId int `json:"cloudsId" gorm:"primaryKey"`
 	Clouds int `json:"all"`
 }
 type WeathersCurrent struct {
 	Weather string `json:"description"`
 }
 type MainParametersCurrent struct {
+	CurrentID int `json:"ID" gorm:"primaryKey"`
 	Current  float64 `json:"temp"`
 	Feels    float64 `json:"feels_like"`
 	Pressure int     `json:"pressure"`
 	Humidity int     `json:"humidity"`
 }
 type WindCurrnet struct {
-	WindSpeed int `json:"speed"`
+	WindSpeed int `json:"speed" gorm:"primaryKey"`
 }
 type InfoSunCurrent struct {
+	SunsetID int `json:"sunsetID" gorm:"primaryKey"`
 	RiseofSun int64 `json:"sunrise"`
 	SetofSun  int64 `json:"sunset"`
 }

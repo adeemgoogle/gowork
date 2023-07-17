@@ -1,19 +1,21 @@
 package main
 
 import (
-
-	"gorm.io/gorm"
-	_ "net/http"
+	"github.com/adeemgoogle/gowork/Serv"
 	"github.com/adeemgoogle/gowork/mypackage"
-	
-	
-	// 	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
 
 func main() {
 	var cityName string = "Almaty"
-	 mypackage.CurrentData(cityName)
+	mypackage.CurrentData(cityName)
 
+	DB := Serv.Init()
+
+	Serv.Close(DB)
 }
+
+
+
