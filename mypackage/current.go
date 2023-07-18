@@ -8,12 +8,14 @@ import (
 	"net/http"
 	"strconv"
 	"time"
+	"gorm.io/gorm"
+
 )
 
 type Current struct {
 	IdCurrent             int                   `json:"id" gorm:"primaryKey"`
 	NameCurrent           string                `json:"name"`
-	WeathersCurrent       []WeathersCurrent     `json:"weather" gorm:"foreignKey:Weather"`
+	WeathersCurrent       []WeathersCurrent     `json:"weather" gorm:"foreignKey:WeatherID"`
 	MainParametersCurrent MainParametersCurrent `json:"main" gorm:"foreignKey: CurrentID"`
 	WindCurrnet           WindCurrnet           `json:"wind" gorm:"foreignKey: WindSpeed"`
 	InfoSunCurrent        InfoSunCurrent        `json:"sys" gorm:"foreignKey:SunsetID"`
@@ -27,7 +29,11 @@ type CloudsCurrent struct {
 	Clouds int `json:"all"`
 }
 type WeathersCurrent struct {
+	WeatherID int `json:"Weather_id" gorm:"primaryKey"`
+	// ID_weather int `json:"id_weather"`
+	Main string `json:"main"`
 	Weather string `json:"description"`
+	Icon string `json:"icon"`
 }
 type MainParametersCurrent struct {
 	CurrentID int `json:"ID" gorm:"primaryKey"`
@@ -37,7 +43,8 @@ type MainParametersCurrent struct {
 	Humidity int     `json:"humidity"`
 }
 type WindCurrnet struct {
-	WindSpeed int `json:"speed" gorm:"primaryKey"`
+	ID int `json:"id" gorm:"primaryKey"`
+	WindSpeed int `json:"speed"`
 }
 type InfoSunCurrent struct {
 	SunsetID int `json:"sunsetID" gorm:"primaryKey"`
@@ -45,7 +52,7 @@ type InfoSunCurrent struct {
 	SetofSun  int64 `json:"sunset"`
 }
 
-func CurrentData(cityName string) {
+func CurrentData(cityName string, DB *gorm.DB) {
 	resp, err := http.Get("https://pro.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=51e51b22fb137270e2e89bd2bc7c4acc&units=metric")
 	if err != nil {
 		log.Fatal(err)
@@ -73,4 +80,6 @@ func CurrentData(cityName string) {
 	fmt.Println(newSunRise.Format("15:04:05"))
 	newSunSet := time.Unix(Currents.InfoSunCurrent.SetofSun+Currents.TimeZone, 0).UTC()
 	fmt.Println(newSunSet.Format("15:04:05"))
+
+	DB.Create(&Currents)
 }
