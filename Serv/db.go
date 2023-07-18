@@ -9,18 +9,23 @@ import (
 )
 
 func Init() *gorm.DB {
-	dbURL := "postgres://postgres:123@localhost:5432/weather"
-	db, err := gorm.Open(postgres.Open(dbURL), &gorm.Config{})
+	// dbURL := "postgres://postgres:123@localhost:5432/weather"
+
+	dsn := fmt.Sprintf("host=localhost user=postgres password=clasypro04 dbname=postgres port=5432 sslmode=disable TimeZone=Asia/Almaty")
+
+
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatal("Failed to connect to the Database")
 	}
 	fmt.Println("🚀 Connected Successfully to the Database")
-	db.AutoMigrate(&mypackage.Current{})
+	
 	db.AutoMigrate(&mypackage.CloudsCurrent{})
 	db.AutoMigrate(&mypackage.InfoSunCurrent{})
 	db.AutoMigrate(&mypackage.MainParametersCurrent{})
 	db.AutoMigrate(&mypackage.WindCurrnet{})
 	db.AutoMigrate(&mypackage.WeathersCurrent{})
+	db.AutoMigrate(&mypackage.Current{})
 	
 	return db
 }
