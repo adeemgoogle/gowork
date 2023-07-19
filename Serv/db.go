@@ -19,13 +19,19 @@ func Init() *gorm.DB {
 		log.Fatal("Failed to connect to the Database")
 	}
 	fmt.Println("🚀 Connected Successfully to the Database")
-	
+
 	db.AutoMigrate(&mypackage.CloudsCurrent{})
 	db.AutoMigrate(&mypackage.InfoSunCurrent{})
 	db.AutoMigrate(&mypackage.MainParametersCurrent{})
 	db.AutoMigrate(&mypackage.WindCurrnet{})
 	db.AutoMigrate(&mypackage.WeathersCurrent{})
 	db.AutoMigrate(&mypackage.Current{})
+
+
+	//hourly / 96 hours
+	
+	
+	
 	
 	return db
 }
