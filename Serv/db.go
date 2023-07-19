@@ -29,9 +29,11 @@ func Init() *gorm.DB {
 
 
 	//hourly / 96 hours
+	db.AutoMigrate(&mypackage.Hourlys{})
 	
 	
 	
+
 	
 	return db
 }
