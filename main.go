@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/adeemgoogle/gowork/Serv"
-	// "github.com/adeemgoogle/gowork/mypackage"
+	"github.com/adeemgoogle/gowork/mypackage"
 	"gorm.io/gorm"
 	"github.com/gin-gonic/gin"
 )
@@ -17,6 +17,9 @@ func main() {
 
 	r := gin.Default()
 	r.GET("/ping", func(c *gin.Context) {
+		var cityName string = "Almaty"
+		mypackage.CurrentData(cityName, DB)
+
 		c.JSON(200, gin.H{
 			"message": "pong",
 		})
