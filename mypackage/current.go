@@ -15,7 +15,7 @@ import (
 type Current struct {
 	IdCurrent             int                   `json:"id" gorm:"primaryKey"`
 	NameCurrent           string                `json:"name"`
-	WeathersCurrent       []WeathersCurrent     `json:"weather" gorm:"foreignKey:WeatherID"`
+	WeathersCurrent       []WeathersCurrent     `json:"weather" gorm:"foreignKey: Weatherid"`
 	MainParametersCurrent MainParametersCurrent `json:"main" gorm:"foreignKey: CurrentID"`
 	WindCurrnet           WindCurrnet           `json:"wind" gorm:"foreignKey: WindSpeed"`
 	InfoSunCurrent        InfoSunCurrent        `json:"sys" gorm:"foreignKey:SunsetID"`
@@ -29,7 +29,7 @@ type CloudsCurrent struct {
 	Clouds int `json:"all"`
 }
 type WeathersCurrent struct {
-	WeatherID int `json:"Weather_id" gorm:"primaryKey"`
+	WeatherID int `json:"id" gorm:"primaryKey"`
 	// ID_weather int `json:"id_weather"`
 	Main string `json:"main"`
 	Weather string `json:"description"`
@@ -68,6 +68,8 @@ func CurrentData(cityName string, DB *gorm.DB) {
 	var Currents Current
 
 	json.Unmarshal(byteResult, &Currents)
+	
+
 
 	fmt.Println("ID: " + strconv.Itoa(Currents.IdCurrent))
 	fmt.Println("Name: " + Currents.NameCurrent)
@@ -82,4 +84,12 @@ func CurrentData(cityName string, DB *gorm.DB) {
 	fmt.Println(newSunSet.Format("15:04:05"))
 
 	DB.Create(&Currents)
+
+	// if len(Currents.WeathersCurrent) > 0 {
+	// 	DB. Current.WeathersCurrent[0]
+
+	// 	// fmt.Println("First user:", firstUser)
+	// } else {
+	// 	fmt.Println("The Users slice is empty.")
+	// }
 }

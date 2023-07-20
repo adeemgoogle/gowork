@@ -20,6 +20,7 @@ func Init() *gorm.DB {
 	}
 	fmt.Println("🚀 Connected Successfully to the Database")
 
+	// current
 	db.AutoMigrate(&mypackage.CloudsCurrent{})
 	db.AutoMigrate(&mypackage.InfoSunCurrent{})
 	db.AutoMigrate(&mypackage.MainParametersCurrent{})
@@ -29,8 +30,8 @@ func Init() *gorm.DB {
 
 
 	//hourly / 96 hours
-	db.AutoMigrate(&mypackage.Hourlys{})
-	
+	// db.AutoMigrate(&mypackage.Hourlys{})
+
 	
 	
 
