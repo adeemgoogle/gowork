@@ -21,6 +21,14 @@ func main() {
 		mypackage.CurrentData(cityName, DB)
 
 		c.JSON(200, gin.H{
+			"message": "ping",
+		})
+	})
+	r.GET("/pong", func(c *gin.Context) {
+		// var cityName string = "Almaty"
+		// mypackage.hourlyData(cityName, DB)
+
+		c.JSON(200, gin.H{
 			"message": "pong",
 		})
 	})
