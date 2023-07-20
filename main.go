@@ -16,17 +16,17 @@ func main() {
 	DB := Serv.Init()
 
 	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
-		var cityName string = "Almaty"
-		mypackage.CurrentData(cityName, DB)
+	// r.GET("/ping", func(c *gin.Context) {
+	// 	var cityName string = "Almaty"
+	// 	mypackage.CurrentData(cityName, DB)
 
-		c.JSON(200, gin.H{
-			"message": "ping",
-		})
-	})
+	// 	c.JSON(200, gin.H{
+	// 		"message": "ping",
+	// 	})
+	// })
 	r.GET("/pong", func(c *gin.Context) {
-		// var cityName string = "Almaty"
-		// mypackage.hourlyData(cityName, DB)
+		var cityName string = "Almaty"
+		mypackage.hourlyData(cityName, DB)
 
 		c.JSON(200, gin.H{
 			"message": "pong",

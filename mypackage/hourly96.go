@@ -8,10 +8,12 @@ import (
 	"net/http"
 	"strconv"
 	"time"
+	"gorm.io/gorm"
+
 )
 
 type Hourlys struct {
-	Hourlys    []Hourly   `json:"list"`
+	Hourlys    []Hourly   `json:"list"  gorm:"foreignKey: HourlyID"`
 	CityHourly CityHourly `json:"city" gorm:"foreignKey:CityHourlyID"`
 }
 type CityHourly struct {
@@ -20,24 +22,27 @@ type CityHourly struct {
 	TimeZone int64  `json:"timezone"`
 }
 type Hourly struct {
-	WeathersHourly       []WeathersHourly     `json:"weather"`
-	MainParametersHourly MainParametersHourly `json:"main"`
+	HourlyId             int                  `gorm:"primaryKey"`
+	WeathersHourly       []WeathersHourly     `json:"weather" gorm:"foreignKey:WeatherHourlyID"`
+	MainParametersHourly MainParametersHourly `json:"main" gorm:"foreignKey:MainHourlyID"`
 	Time                 int64                `json:"dt"`
-	RainHourly           RainHourly           `json:"rain"`
+	// RainHourly           RainHourly           `json:"rain"`
 }
 
 type RainHourly struct {
 	Rain float64 `json:"1h"`
 }
 type WeathersHourly struct {
+	WeatherHourlyID     int       `gorm:"primaryKey"`
 	Weather string `json:"description"`
 }
 type MainParametersHourly struct {
+	MainHourlyID int    `gorm:"primaryKey"`
 	Temperature float64 `json:"temp"`
 	Feels       float64 `json:"feels_like"`
 }
 
-func hourlyData(cityName string) {
+func hourlyData(cityName string, DB *gorm.DB) {
 	resp, err := http.Get("https://pro.openweathermap.org/data/2.5/forecast/hourly?q=" + cityName + "&appid=51e51b22fb137270e2e89bd2bc7c4acc&units=metric")
 	if err != nil {
 		log.Fatal(err)
@@ -62,8 +67,12 @@ func hourlyData(cityName string) {
 		fmt.Println("Feels Like: " + strconv.FormatFloat(hourlys.Hourlys[i].MainParametersHourly.Feels, 'f', 0, 64))
 		newSunRise := time.Unix(hourlys.Hourlys[i].Time+hourlys.CityHourly.TimeZone, 0).UTC()
 		fmt.Println(newSunRise.Format("2006-01-02 15:04:05"))
-		fmt.Println("Rain: " + strconv.FormatFloat(hourlys.Hourlys[i].RainHourly.Rain, 'f', -2, 64))
+		// fmt.Println("Rain: " + strconv.FormatFloat(hourlys.Hourlys[i].RainHourly.Rain, 'f', -2, 64))
 
 		fmt.Println("------------------------------------------")
 	}
+
+	DB.Create(&hourlys)
+
+
 }

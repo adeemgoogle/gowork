@@ -13,11 +13,11 @@ import (
 )
 
 type Current struct {
-	IdCurrent             int                   `json:"id" gorm:"primaryKey"`
+	Id             int                   `json:"id" gorm:"primaryKey"`
 	NameCurrent           string                `json:"name"`
-	WeathersCurrent       []WeathersCurrent     `json:"weather" gorm:"foreignKey: Weatherid"`
+	WeathersCurrent       []WeathersCurrent     `json:"weather" gorm:"foreignKey: WeatherID"`
 	MainParametersCurrent MainParametersCurrent `json:"main" gorm:"foreignKey: CurrentID"`
-	WindCurrnet           WindCurrnet           `json:"wind" gorm:"foreignKey: WindSpeed"`
+	WindCurrnet           WindCurrent           `json:"wind" gorm:"foreignKey: WindID"`
 	InfoSunCurrent        InfoSunCurrent        `json:"sys" gorm:"foreignKey:SunsetID"`
 	TimeZone              int64                 `json:"timezone"`
 	CloudsCurrent         CloudsCurrent         `json:"clouds" gorm:"foreignKey: CloudsId"`
@@ -25,7 +25,7 @@ type Current struct {
 }
 
 type CloudsCurrent struct {
-	CloudsId int `json:"cloudsId" gorm:"primaryKey"`
+	CloudsId int `gorm:"primaryKey;autoIncrement"`
 	Clouds int `json:"all"`
 }
 type WeathersCurrent struct {
@@ -36,18 +36,18 @@ type WeathersCurrent struct {
 	Icon string `json:"icon"`
 }
 type MainParametersCurrent struct {
-	CurrentID int `json:"ID" gorm:"primaryKey"`
+	CurrentID int `gorm:"primaryKey;autoIncrement"`
 	Current  float64 `json:"temp"`
 	Feels    float64 `json:"feels_like"`
 	Pressure int     `json:"pressure"`
 	Humidity int     `json:"humidity"`
 }
-type WindCurrnet struct {
-	ID int `json:"id" gorm:"primaryKey"`
+type WindCurrent struct {
+	WindID int `gorm:"primaryKey;autoIncrement"`
 	WindSpeed int `json:"speed"`
 }
 type InfoSunCurrent struct {
-	SunsetID int `json:"sunsetID" gorm:"primaryKey"`
+	SunsetID int `json:"id" gorm:"primaryKey"`
 	RiseofSun int64 `json:"sunrise"`
 	SetofSun  int64 `json:"sunset"`
 }
@@ -71,7 +71,7 @@ func CurrentData(cityName string, DB *gorm.DB) {
 	
 
 
-	fmt.Println("ID: " + strconv.Itoa(Currents.IdCurrent))
+	fmt.Println("ID: " + strconv.Itoa(Currents.Id))
 	fmt.Println("Name: " + Currents.NameCurrent)
 	fmt.Println("Weather Condition: " + Currents.WeathersCurrent[0].Weather)
 	fmt.Println("Current Temperature: " + strconv.FormatFloat(Currents.MainParametersCurrent.Current, 'f', -2, 64))
