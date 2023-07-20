@@ -11,15 +11,18 @@ import (
 )
 
 type Dailys struct {
-	Dailys []Daily `json:"list"`
-	City   City    `json:"city"`
+	ID uint        `gorm:"primaryKey"`
+	Dailys []Daily `json:"list" gorm:"foreignKey: ParntID"`
+	City   City    `json:"city" gorm:"foreignKey: CityDailyID"`
 }
 type City struct {
-	Id       int    `json:"id"`
+	CityDailyID       int    `json:"id" gorm:"primaryKey"`
 	Name     string `json:"name"`
 	TimeZone int64  `json:"timezone"`
 }
 type Daily struct {
+	DailyID             uint                `gorm:"primaryKey"`
+	ParentID uint
 	WeathersDaily       []WeathersDaily     `json:"weather"`
 	MainParametersDaily MainParametersDaily `json:"temp"`
 	Time                int64               `json:"dt"`
