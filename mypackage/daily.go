@@ -53,7 +53,7 @@ func main() {
 	json.Unmarshal(byteResult, &dailys)
 
 	for i := 0; i < len(dailys.Dailys); i++ {
-		fmt.Println("ID: " + strconv.Itoa(dailys.City.Id))
+		// fmt.Println("ID: " + strconv.Itoa(dailys.City.Id))
 		fmt.Println("City Name: " + dailys.City.Name)
 		fmt.Println("Weather Condition: " + dailys.Dailys[i].WeathersDaily[0].Weather)
 		fmt.Println("Maximum Temperature: " + strconv.FormatFloat(dailys.Dailys[i].MainParametersDaily.TemperatureMax, 'f', -2, 64))
