@@ -24,7 +24,15 @@ func main() {
 	// 		"message": "ping",
 	// 	})
 	// })
-	r.GET("/pong", func(c *gin.Context) {
+	// r.GET("/pong", func(c *gin.Context) {
+	// 	var cityName string = "Almaty"
+	// 	mypackage.HourlyData(cityName, DB)
+
+	// 	c.JSON(200, gin.H{
+	// 		"message": "pong",
+	// 	})
+	// })
+	r.GET("/daily", func(c *gin.Context) {
 		var cityName string = "Almaty"
 		mypackage.HourlyData(cityName, DB)
 
