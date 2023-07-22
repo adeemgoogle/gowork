@@ -13,8 +13,8 @@ import (
 )
 
 type Dailys struct {
-	ID uint        `gorm:"primaryKey"`
-	Dailys []Daily `json:"list" gorm:"foreignKey: ParentID"`
+	ID uint        `gorm:"primaryKey;autoIncrement"`
+	Daily []Daily `json:"list" gorm:"foreignKey: DailyID"`
 	City   City    `json:"city" gorm:"foreignKey: CityDailyID"`
 }
 type City struct {
@@ -24,9 +24,9 @@ type City struct {
 }
 type Daily struct {
 	DailyID             uint                `gorm:"primaryKey;autoIncrement"`
-	ParentID            uint
-	WeathersDaily       []WeathersDaily     `json:"weather"`
-	MainParametersDaily MainParametersDaily `json:"temp"`
+	ParentDailyID       uint
+	WeathersDaily       []WeathersDaily     `json:"weather" gorm:"foreignKey:WeathersDailyID"`
+	MainParametersDaily MainParametersDaily `json:"temp"  gorm:"foreignKey:MainParametersDailyID"`
 	Time                int64               `json:"dt"`
 }
 type WeathersDaily struct {
