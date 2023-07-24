@@ -67,6 +67,6 @@ func DailyData(cityName string, DB *gorm.DB) {
 	// 	fmt.Println("------------------------------------------")
 	// }
 
-	DB.Create(&dailys)
+	// DB.Create(&dailys)
 
 }

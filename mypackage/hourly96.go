@@ -74,7 +74,7 @@ func HourlyData(cityName string, DB *gorm.DB) {
 	// 	fmt.Println("------------------------------------------")
 	// }
 
-	DB.Create(&hourlys)
+	// DB.Create(&hourlys)
 
 
 }

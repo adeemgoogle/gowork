@@ -2,7 +2,7 @@ package Serv
 
 import (
 	"fmt"
-	// "github.com/adeemgoogle/gowork/mypackage"
+	"github.com/adeemgoogle/gowork/mypackage"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
@@ -21,12 +21,12 @@ func Init() *gorm.DB {
 	fmt.Println("🚀 Connected Successfully to the Database")
 
 	// current
-	// db.AutoMigrate(&mypackage.CloudsCurrent{})
-	// db.AutoMigrate(&mypackage.InfoSunCurrent{})
-	// db.AutoMigrate(&mypackage.MainParametersCurrent{})
-	// db.AutoMigrate(&mypackage.WindCurrent{})
-	// db.AutoMigrate(&mypackage.WeathersCurrent{})
-	// db.AutoMigrate(&mypackage.Current{})
+	db.AutoMigrate(&mypackage.CloudsCurrent{})
+	db.AutoMigrate(&mypackage.InfoSunCurrent{})
+	db.AutoMigrate(&mypackage.MainParametersCurrent{})
+	db.AutoMigrate(&mypackage.WindCurrent{})
+	db.AutoMigrate(&mypackage.WeathersCurrent{})
+	db.AutoMigrate(&mypackage.Current{})
 
 
 	//hourly / 96 hours
