@@ -2,7 +2,7 @@ package Serv
 
 import (
 	"fmt"
-	"github.com/adeemgoogle/gowork/mypackage"
+	// "github.com/adeemgoogle/gowork/mypackage"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
@@ -38,11 +38,11 @@ func Init() *gorm.DB {
 
 
 	//daily / 7 days
-	db.AutoMigrate(&mypackage.MainParametersDaily{})
-	db.AutoMigrate(&mypackage.WeathersDaily{})
-	db.AutoMigrate(&mypackage.City{})
-	db.AutoMigrate(&mypackage.Daily{})
-	db.AutoMigrate(&mypackage.Dailys{})
+	// db.AutoMigrate(&mypackage.MainParametersDaily{})
+	// db.AutoMigrate(&mypackage.WeathersDaily{})
+	// db.AutoMigrate(&mypackage.City{})
+	// db.AutoMigrate(&mypackage.Daily{})
+	// db.AutoMigrate(&mypackage.Dailys{})
 
 
 
