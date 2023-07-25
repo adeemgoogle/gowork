@@ -9,7 +9,7 @@ import (
 	"io/ioutil"
 	"log"
 	"encoding/json"
-
+	"fmt"
 )
 
 var DB *gorm.DB
@@ -101,18 +101,54 @@ func main() {
 	
 		DB.Create(&Currents)
 	
-		// c.JSON(200, gin.H{
-		// 	"message": "ping",
-		// })
-	
 		c.JSON(http.StatusCreated, Currents)
 	})
-	r.PUT("/alldailys/:id", func(c *gin.Context) {
-        dailysID := c.Param("id")
+	r.POST("/createDaily", func(c *gin.Context)  {
+		var cityName string = "Almaty"
+		// mypackage.CurrentData(cityName, DB)
+	
+		// city10 := []string{"Almaty", "London", "Astana", "Moscow", "Madrid"}
+	
+		// for i := 0; i<5;i++{
+		// 	mypackage.CurrentData(city10[i], DB)
+		// }
+	
+		resp, err := http.Get("https://pro.openweathermap.org/data/2.5/forecast/daily?q=" + cityName + "&appid=51e51b22fb137270e2e89bd2bc7c4acc&units=metric")
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer resp.Body.Close()
+
+		// Чтение ответа
+		byteResult, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		var dailys mypackage.Dailys
+
+		json.Unmarshal(byteResult, &dailys)
+	
+		DB.Create(&dailys)
+	
+		c.JSON(http.StatusCreated, dailys)
+	})
+	r.PUT("/alldailys/:name", func(c *gin.Context) {
+        dailysName := c.Param("name")
 
         var existingDailys mypackage.Dailys
 
-        if err := DB.First(&existingDailys, dailysID).Error; err != nil {
+		var citi mypackage.City
+
+
+		// db.Preload("Posts").Where("email = ?", userEmail).First(&user).Error;
+
+		if err := DB.Table("cities").Where("name = ?", dailysName).First(&citi).Error; err != nil {
+            c.JSON(http.StatusNotFound, gin.H{"error": "Dailys not found"})
+            return
+        }
+
+        if err := DB.First(&existingDailys, citi.CityDailyID).Error; err != nil {
             c.JSON(http.StatusNotFound, gin.H{"error": "Current not found"})
             return
         }
@@ -138,13 +174,65 @@ func main() {
         
 
         // Update the existing user with the new data
-        existingDailys  = updatedDailys
+        // existingDailys  = updatedDailys
 
         // Save the updated user to the database
-        DB.Save(&existingDailys)
+        // DB.Save(&existingDailys)
+		DB.Model(&existingDailys).Updates(updatedDailys)
 
         // Return the updated user in the response
         c.JSON(http.StatusOK, existingDailys)
+    })
+	r.PUT("/allCurrent/:name", func(c *gin.Context) {
+        currentName := c.Param("name")
+		fmt.Println(currentName)
+
+        var existingCurrent mypackage.Current
+
+		// var citi mypackage.City
+
+
+		// db.Preload("Posts").Where("email = ?", userEmail).First(&user).Error;
+
+		if err := DB.Table("currents").Where("name_current  = ?", currentName).First(&existingCurrent).Error; err != nil {
+            c.JSON(http.StatusNotFound, gin.H{"error": "Current not found"})
+            return
+        }
+
+        // if err := DB.First(&existingDailys, citi.CityDailyID).Error; err != nil {
+        //     c.JSON(http.StatusNotFound, gin.H{"error": "Current not found"})
+        //     return
+        // }
+
+        var updatedCurrent mypackage.Current
+		var cityName string = "Almaty"
+
+		resp, err := http.Get("https://pro.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=51e51b22fb137270e2e89bd2bc7c4acc&units=metric")
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer resp.Body.Close()
+
+		// Чтение ответа
+		byteResult, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		// var dailys Dailys
+
+		json.Unmarshal(byteResult, &updatedCurrent)
+        
+
+        // Update the existing user with the new data
+        // existingDailys  = updatedDailys
+
+        // Save the updated user to the database
+        // DB.Save(&existingDailys)
+		// DB.Model(&existingCurrent).Updates(updatedCurrent)
+
+        // Return the updated user in the response
+        c.JSON(http.StatusOK, existingCurrent)
     })
 
 	// r.GET("/daily", func(c *gin.Context) {

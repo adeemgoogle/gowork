@@ -14,7 +14,7 @@ import (
 
 type Dailys struct {
 	ID uint        `gorm:"primaryKey;autoIncrement"`
-	Daily []Daily `json:"list" gorm:"foreignKey: DailyID"`
+	Daily []Daily `json:"list" gorm:"foreignKey: ParentDailyID"`
 	City   City    `json:"city" gorm:"foreignKey: CityDailyID"`
 }
 type City struct {
