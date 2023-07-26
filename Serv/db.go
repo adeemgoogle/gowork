@@ -21,12 +21,12 @@ func Init() *gorm.DB {
 	fmt.Println("🚀 Connected Successfully to the Database")
 
 	// current
-	db.AutoMigrate(&mypackage.CloudsCurrent{})
-	db.AutoMigrate(&mypackage.InfoSunCurrent{})
-	db.AutoMigrate(&mypackage.MainParametersCurrent{})
-	db.AutoMigrate(&mypackage.WindCurrent{})
-	db.AutoMigrate(&mypackage.WeathersCurrent{})
-	db.AutoMigrate(&mypackage.Current{})
+	// db.AutoMigrate(&mypackage.CloudsCurrent{})
+	// db.AutoMigrate(&mypackage.InfoSunCurrent{})
+	// db.AutoMigrate(&mypackage.MainParametersCurrent{})
+	// db.AutoMigrate(&mypackage.WindCurrent{})
+	// db.AutoMigrate(&mypackage.WeathersCurrent{})
+	// db.AutoMigrate(&mypackage.Current{})
 
 
 	//hourly / 96 hours
@@ -38,11 +38,11 @@ func Init() *gorm.DB {
 
 
 	//daily / 7 days
-	// db.AutoMigrate(&mypackage.MainParametersDaily{})
-	// db.AutoMigrate(&mypackage.WeathersDaily{})
-	// db.AutoMigrate(&mypackage.City{})
-	// db.AutoMigrate(&mypackage.Daily{})
-	// db.AutoMigrate(&mypackage.Dailys{})
+	db.AutoMigrate(&mypackage.MainParametersDaily{})
+	db.AutoMigrate(&mypackage.WeathersDaily{})
+	db.AutoMigrate(&mypackage.City{})
+	db.AutoMigrate(&mypackage.Daily{})
+	db.AutoMigrate(&mypackage.Dailys{})
 
 
 

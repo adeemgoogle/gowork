@@ -18,7 +18,7 @@ type Dailys struct {
 	City   City    `json:"city" gorm:"foreignKey: CityDailyID"`
 }
 type City struct {
-	CityDailyID       int    `json:"id" gorm:"primaryKey;autoIncrement"`
+	CityDailyID       int    `gorm:"primaryKey;autoIncrement"`
 	Name     string `json:"name"`
 	TimeZone int64  `json:"timezone"`
 }
