@@ -1,22 +1,19 @@
 package main
 
 import (
-	"github.com/adeemgoogle/gowork/Serv"
-	"github.com/adeemgoogle/gowork/mypackage"
-	"gorm.io/gorm"
-	"github.com/gin-gonic/gin"
-	"net/http"
-	"io/ioutil"
-	"log"
 	"encoding/json"
 	"fmt"
+	"github.com/adeemgoogle/gowork/Fronts"
+	"github.com/adeemgoogle/gowork/Serv"
+	"github.com/adeemgoogle/gowork/mypackage"
+	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
+	"io/ioutil"
+	"log"
+	"net/http"
 )
 
 var DB *gorm.DB
-
-
-
-
 // func createHourlyHandler(c *gin.Context) {
 //     var cityName string = "Almaty"
 // 	mypackage.HourlyData(cityName, DB)
@@ -76,13 +73,10 @@ func main() {
 	r.POST("/createCurrent", func(c *gin.Context)  {
 		var cityName string = "Almaty"
 		// mypackage.CurrentData(cityName, DB)
-	
 		// city10 := []string{"Almaty", "London", "Astana", "Moscow", "Madrid"}
-	
 		// for i := 0; i<5;i++{
 		// 	mypackage.CurrentData(city10[i], DB)
 		// }
-	
 		resp, err := http.Get("https://pro.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=51e51b22fb137270e2e89bd2bc7c4acc&units=metric")
 		if err != nil {
 			log.Fatal(err)
@@ -112,7 +106,6 @@ func main() {
 		// for i := 0; i<5;i++{
 		// 	mypackage.CurrentData(city10[i], DB)
 		// }
-	
 		resp, err := http.Get("https://pro.openweathermap.org/data/2.5/forecast/daily?q=" + cityName + "&appid=51e51b22fb137270e2e89bd2bc7c4acc&units=metric")
 		if err != nil {
 			log.Fatal(err)
@@ -139,10 +132,7 @@ func main() {
         var existingDailys mypackage.Dailys
 
 		var citi mypackage.City
-
-
 		// db.Preload("Posts").Where("email = ?", userEmail).First(&user).Error;
-
 		if err := DB.Table("cities").Where("name = ?", dailysName).First(&citi).Error; err != nil {
             c.JSON(http.StatusNotFound, gin.H{"error": "Dailys not found"})
             return
@@ -243,7 +233,9 @@ func main() {
 	// 		"message": "pong",
 	// 	})
 	// })
-
+	Fronts.GetCurrent()
+	Fronts.GetDaily()
+	Fronts.GetHourly()
 	r.Run() // listen and serve on 0.0.0.0:8080
 
 	// Serv.Close(DB)

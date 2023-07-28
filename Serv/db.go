@@ -9,12 +9,12 @@ import (
 )
 
 func Init() *gorm.DB {
-	// dbURL := "postgres://postgres:123@localhost:5432/weather"
+	dbURL := "postgres://postgres:123@localhost:5432/weather"
 
-	dsn := fmt.Sprintf("host=localhost user=postgres password=clasypro04 dbname=postgres port=5432 sslmode=disable TimeZone=Asia/Almaty")
+	//dsn := fmt.Sprintf("host=localhost user=postgres password=clasypro04 dbname=postgres port=5432 sslmode=disable TimeZone=Asia/Almaty")
 
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dbURL), &gorm.Config{})
 	if err != nil {
 		log.Fatal("Failed to connect to the Database")
 	}
@@ -30,26 +30,20 @@ func Init() *gorm.DB {
 
 
 	//hourly / 96 hours
-	// db.AutoMigrate(&mypackage.CityHourly{})
-	// db.AutoMigrate(&mypackage.WeathersHourly{})
-	// db.AutoMigrate(&mypackage.MainParametersHourly{})
-	// db.AutoMigrate(&mypackage.Hourly{})
-	// db.AutoMigrate(&mypackage.Hourlys{})
+	db.AutoMigrate(&mypackage.CityHourly{})
+	db.AutoMigrate(&mypackage.WeathersHourly{})
+	db.AutoMigrate(&mypackage.MainParametersHourly{})
+	db.AutoMigrate(&mypackage.Hourly{})
+	db.AutoMigrate(&mypackage.Hourlys{})
 
 
 	//daily / 7 days
-	// db.AutoMigrate(&mypackage.MainParametersDaily{})
-	// db.AutoMigrate(&mypackage.WeathersDaily{})
-	// db.AutoMigrate(&mypackage.City{})
-	// db.AutoMigrate(&mypackage.Daily{})
-	// db.AutoMigrate(&mypackage.Dailys{})
+	db.AutoMigrate(&mypackage.MainParametersDaily{})
+	db.AutoMigrate(&mypackage.WeathersDaily{})
+	db.AutoMigrate(&mypackage.City{})
+	db.AutoMigrate(&mypackage.Daily{})
+	db.AutoMigrate(&mypackage.Dailys{})
 
-
-
-	
-	
-
-	
 	return db
 }
 func Close(db *gorm.DB) {

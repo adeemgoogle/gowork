@@ -2,14 +2,10 @@ package mypackage
 
 import (
 	"encoding/json"
-	"fmt"
+	"gorm.io/gorm"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"strconv"
-	"time"
-	"gorm.io/gorm"
-
 )
 
 type Current struct {
@@ -68,28 +64,7 @@ func CurrentData(cityName string, DB *gorm.DB) {
 	var Currents Current
 
 	json.Unmarshal(byteResult, &Currents)
-	
-
-
-	fmt.Println("ID: " + strconv.Itoa(Currents.Id))
-	fmt.Println("Name: " + Currents.NameCurrent)
-	fmt.Println("Weather Condition: " + Currents.WeathersCurrent[0].Weather)
-	fmt.Println("Current Temperature: " + strconv.FormatFloat(Currents.MainParametersCurrent.Current, 'f', -2, 64))
-	fmt.Println("Feels Like: " + strconv.FormatFloat(Currents.MainParametersCurrent.Feels, 'f', 0, 64))
-	fmt.Println("Pressure : " + strconv.Itoa(Currents.MainParametersCurrent.Pressure))
-	fmt.Println("Wind Speed: " + strconv.Itoa(Currents.WindCurrnet.WindSpeed))
-	newSunRise := time.Unix(Currents.InfoSunCurrent.RiseofSun+Currents.TimeZone, 0).UTC()
-	fmt.Println(newSunRise.Format("15:04:05"))
-	newSunSet := time.Unix(Currents.InfoSunCurrent.SetofSun+Currents.TimeZone, 0).UTC()
-	fmt.Println(newSunSet.Format("15:04:05"))
 
 	DB.Create(&Currents)
 
-	// if len(Currents.WeathersCurrent) > 0 {
-	// 	DB. Current.WeathersCurrent[0]
-
-	// 	// fmt.Println("First user:", firstUser)
-	// } else {
-	// 	fmt.Println("The Users slice is empty.")
-	// }
 }

@@ -1,0 +1,124 @@
+[
+    {
+        "ID": 1,
+        "list": [
+            {
+                "DailyID": 1,
+                "ParentDailyID": 1,
+                "weather": [
+                    {
+                        "WeathersDailyID": 1,
+                        "description": "sky is clear"
+                    }
+                ],
+                "temp": {
+                    "MainParametersDailyID": 1,
+                    "max": 34.56,
+                    "min": 19.95
+                },
+                "dt": 1690610400
+            },
+            {
+                "DailyID": 2,
+                "ParentDailyID": 1,
+                "weather": [
+                    {
+                        "WeathersDailyID": 2,
+                        "description": "scattered clouds"
+                    }
+                ],
+                "temp": {
+                    "MainParametersDailyID": 2,
+                    "max": 36.69,
+                    "min": 22.16
+                },
+                "dt": 1690696800
+            },
+            {
+                "DailyID": 3,
+                "ParentDailyID": 1,
+                "weather": [
+                    {
+                        "WeathersDailyID": 3,
+                        "description": "light rain"
+                    }
+                ],
+                "temp": {
+                    "MainParametersDailyID": 3,
+                    "max": 35.76,
+                    "min": 23.88
+                },
+                "dt": 1690783200
+            },
+            {
+                "DailyID": 4,
+                "ParentDailyID": 1,
+                "weather": [
+                    {
+                        "WeathersDailyID": 4,
+                        "description": "few clouds"
+                    }
+                ],
+                "temp": {
+                    "MainParametersDailyID": 4,
+                    "max": 38.26,
+                    "min": 24.94
+                },
+                "dt": 1690869600
+            },
+            {
+                "DailyID": 5,
+                "ParentDailyID": 1,
+                "weather": [
+                    {
+                        "WeathersDailyID": 5,
+                        "description": "light rain"
+                    }
+                ],
+                "temp": {
+                    "MainParametersDailyID": 5,
+                    "max": 36.15,
+                    "min": 22.31
+                },
+                "dt": 1690956000
+            },
+            {
+                "DailyID": 6,
+                "ParentDailyID": 1,
+                "weather": [
+                    {
+                        "WeathersDailyID": 6,
+                        "description": "sky is clear"
+                    }
+                ],
+                "temp": {
+                    "MainParametersDailyID": 6,
+                    "max": 36.45,
+                    "min": 23.98
+                },
+                "dt": 1691042400
+            },
+            {
+                "DailyID": 7,
+                "ParentDailyID": 1,
+                "weather": [
+                    {
+                        "WeathersDailyID": 7,
+                        "description": "sky is clear"
+                    }
+                ],
+                "temp": {
+                    "MainParametersDailyID": 7,
+                    "max": 37.38,
+                    "min": 23.76
+                },
+                "dt": 1691128800
+            }
+        ],
+        "city": {
+            "id": 0,
+            "name": "",
+            "timezone": 0
+        }
+    }
+]

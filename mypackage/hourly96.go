@@ -60,20 +60,6 @@ func HourlyData(cityName string, DB *gorm.DB) {
 	var hourlys Hourlys
 
 	json.Unmarshal(byteResult, &hourlys)
-
-	// for i := 0; i < len(hourlys.Hourlys); i++ {
-	// 	fmt.Println("ID: " + strconv.Itoa(hourlys.CityHourly.Id))
-	// 	fmt.Println("City Name: " + hourlys.CityHourly.Name)
-	// 	fmt.Println("Weather Condition: " + hourlys.Hourlys[i].WeathersHourly[0].Weather)
-	// 	fmt.Println("Current Temperature: " + strconv.FormatFloat(hourlys.Hourlys[i].MainParametersHourly.Temperature, 'f', -2, 64))
-	// 	fmt.Println("Feels Like: " + strconv.FormatFloat(hourlys.Hourlys[i].MainParametersHourly.Feels, 'f', 0, 64))
-	// 	newSunRise := time.Unix(hourlys.Hourlys[i].Time+hourlys.CityHourly.TimeZone, 0).UTC()
-	// 	fmt.Println(newSunRise.Format("2006-01-02 15:04:05"))
-	// 	// fmt.Println("Rain: " + strconv.FormatFloat(hourlys.Hourlys[i].RainHourly.Rain, 'f', -2, 64))
-
-	// 	fmt.Println("------------------------------------------")
-	// }
-
 	// DB.Create(&hourlys)
 
 

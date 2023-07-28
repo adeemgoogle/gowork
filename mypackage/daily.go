@@ -56,17 +56,6 @@ func DailyData(cityName string, DB *gorm.DB) {
 
 	json.Unmarshal(byteResult, &dailys)
 
-	// for i := 0; i < len(dailys.Dailys); i++ {
-	// 	// fmt.Println("ID: " + strconv.Itoa(dailys.City.Id))
-	// 	fmt.Println("City Name: " + dailys.City.Name)
-	// 	fmt.Println("Weather Condition: " + dailys.Dailys[i].WeathersDaily[0].Weather)
-	// 	fmt.Println("Maximum Temperature: " + strconv.FormatFloat(dailys.Dailys[i].MainParametersDaily.TemperatureMax, 'f', -2, 64))
-	// 	fmt.Println("Minimum Temperature: " + strconv.FormatFloat(dailys.Dailys[i].MainParametersDaily.TemperatureMin, 'f', -2, 64))
-	// 	newSunRise := time.Unix(dailys.Dailys[i].Time+dailys.City.TimeZone, 0).UTC()
-	// 	fmt.Println(newSunRise.Format("2006-01-02 15:04:05"))
-	// 	fmt.Println("------------------------------------------")
-	// }
-
 	// DB.Create(&dailys)
 
 }

@@ -1,0 +1,36 @@
+[
+    {
+        "id": 1526384,
+        "name": "Almaty",
+        "weather": [
+            {
+                "id": 1526384,
+                "main": "Clouds",
+                "description": "few clouds",
+                "icon": "02d"
+            }
+        ],
+        "main": {
+            "CurrentID": 1526384,
+            "temp": 36.95,
+            "feels_like": 34.17,
+            "pressure": 1006,
+            "humidity": 11
+        },
+        "wind": {
+            "WindID": 1526384,
+            "speed": 3
+        },
+        "sys": {
+            "id": 1526384,
+            "sunrise": 1690328122,
+            "sunset": 1690381307
+        },
+        "timezone": 21600,
+        "clouds": {
+            "CloudsId": 1526384,
+            "all": 20
+        },
+        "visibility": 10000
+    }
+]
