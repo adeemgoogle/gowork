@@ -130,6 +130,24 @@ func main() {
 		json.Unmarshal(byteResult, &dailys)
 	
 		DB.Create(&dailys)
+
+		resp2, err := http.Get("https://pro.openweathermap.org/data/2.5/forecast/daily?q=" + cityName + "&appid=51e51b22fb137270e2e89bd2bc7c4acc&units=metric")
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer resp2.Body.Close()
+
+		// Чтение ответа
+		byteResult2, err := ioutil.ReadAll(resp2.Body)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		var dailys2 mypackage.Dailys
+
+		json.Unmarshal(byteResult2, &dailys2)
+	
+		// DB.Create(&dailys2)
 	
 		c.JSON(http.StatusCreated, dailys)
 	})
@@ -167,38 +185,42 @@ func main() {
         dailysName := c.Param("name")
 
         var existingDailys mypackage.Dailys
-
-		// var citi mypackage.City
-
-		// db.Preload("Posts").Where("email = ?", userEmail).First(&user).Error;
-
-		// if err := DB.Table("cities").Where("name = ?", dailysName).First(&citi).Error; err != nil {
-        //     c.JSON(http.StatusNotFound, gin.H{"error": "Dailys not found"})
-        //     return
-        // }
-
-        // if err := DB.First(&existingDailys, citi.CityDailyID).Error; err != nil {
-        //     c.JSON(http.StatusNotFound, gin.H{"error": "Current not found"})
-        //     return
-        // }
-
-
-		// Find the row in the `City` table where the `Name` column matches the given name.
-		var city mypackage.City
-		if err := DB.Where("name = ?", dailysName).First(&city).Error; err != nil {
-			c.JSON(http.StatusNotFound, gin.H{"error": "Dailys not found1"})
+        var city mypackage.City
+		if err := DB.Table("cities").
+		Where("name = ?", dailysName).First(&city).Error; err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Dailys not found2"})
 			return
 		}
 
-		// Load the associated `Dailys` and related data from the connected tables.
+
+
+		// Load the associated `Daily` and related data from the connected tables.
 		if err := DB.Preload("City").
+		Preload("Daily.MainParametersDaily").
+		Preload("Daily.WeathersDaily").
 		Preload("Daily").
 		Where("id = ?", city.CityDailyID).First(&existingDailys).Error; err != nil {
 			c.JSON(http.StatusNotFound, gin.H{"error": "Dailys not found2"})
 			return
 		}
 
+		// if err := DB.Table("dailys").
+		// 	// Select("dailys.*, cities.*, dailys.id as id, weathers_dailies.*, main_parameters_dailies.*").
+		// 	Select("dailys.*, cities.name").
+		// 	Joins("LEFT JOIN cities ON dailys.id = cities.city_daily_id").
+		// 	Joins("LEFT JOIN dailies ON dailys.id = dailies.parent_daily_id").
+		// 	Joins("LEFT JOIN weathers_dailies ON dailys.id = weathers_dailies.weathers_daily_id").
+		// 	Joins("LEFT JOIN main_parameters_dailies ON dailys.id = main_parameters_dailies.main_parameters_daily_id").
+		// 	Where("cities.name = ?", dailysName).
+		// 	Find(&existingDailys).Error; err != nil {
+		// 		c.JSON(http.StatusNotFound, gin.H{"error": "Dailys not found2"})
+		// 		return
+		// 	}
+
+
         var updatedDailys mypackage.Dailys
+		updatedDailys.ID = existingDailys.ID
+		fmt.Println(updatedDailys.ID)
 		var cityName string = "Almaty"
 
 		resp, err := http.Get("https://pro.openweathermap.org/data/2.5/forecast/daily?q=" + cityName + "&appid=51e51b22fb137270e2e89bd2bc7c4acc&units=metric")
@@ -218,25 +240,107 @@ func main() {
 		json.Unmarshal(byteResult, &updatedDailys)
 
 
-		updatedDailys.ID = existingDailys.ID
-		fmt.Println(updatedDailys.ID)
-        
 
         // Update the existing user with the new data
-        existingDailys  = updatedDailys
+		for i:=0;i<7;i++ {
+			updatedDailys.Daily[i].DailyID = existingDailys.Daily[i].DailyID
+			updatedDailys.Daily[i].ParentDailyID = existingDailys.Daily[i].ParentDailyID
+			updatedDailys.Daily[i].WeathersDaily[0].WeathersDailyID = existingDailys.Daily[i].WeathersDaily[0].WeathersDailyID
+			updatedDailys.Daily[i].MainParametersDaily.MainParametersDailyID = existingDailys.Daily[i].MainParametersDaily.MainParametersDailyID
+		}
+        existingDailys = updatedDailys
 
         // Save the updated user to the database
-        // DB.Save(&existingDailys)
+        DB.Save(&existingDailys)
 		// DB.Model(&existingDailys).Updates(updatedDailys)
 
-		if err := DB.Session(&gorm.Session{FullSaveAssociations: true}).Updates(&existingDailys).Error; err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update the current"})
-			return
-		}
+		// if err := DB.Session(&gorm.Session{FullSaveAssociations: true}).Updates(&existingDailys).Error; err != nil {
+		// 	c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update the current"})
+		// 	return
+		// }
 
         // Return the updated user in the response
         c.JSON(http.StatusOK, existingDailys)
-    })
+	})
+	r.PUT("/allhourly/:name", func(c *gin.Context) {
+        dailysName := c.Param("name")
+
+        var existingHourlys mypackage.Hourlys
+        var cityHourly mypackage.CityHourly
+		if err := DB.Table("city_hourlies").
+		Where("name = ?", dailysName).First(&cityHourly).Error; err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Hourlys not found1"})
+			return
+		}
+
+
+
+		// Load the associated `Daily` and related data from the connected tables.
+		if err := DB.Preload("CityHourly").
+		Preload("Hourly.MainParametersHourly").
+		Preload("Hourly.WeathersHourly").
+		Preload("Hourly").
+		Where("id = ?", cityHourly.CityHourlyID).First(&existingHourlys).Error; err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Dailys not found2"})
+			return
+		}
+
+		// if err := DB.Table("dailys").
+		// 	// Select("dailys.*, cities.*, dailys.id as id, weathers_dailies.*, main_parameters_dailies.*").
+		// 	Select("dailys.*, cities.name").
+		// 	Joins("LEFT JOIN cities ON dailys.id = cities.city_daily_id").
+		// 	Joins("LEFT JOIN dailies ON dailys.id = dailies.parent_daily_id").
+		// 	Joins("LEFT JOIN weathers_dailies ON dailys.id = weathers_dailies.weathers_daily_id").
+		// 	Joins("LEFT JOIN main_parameters_dailies ON dailys.id = main_parameters_dailies.main_parameters_daily_id").
+		// 	Where("cities.name = ?", dailysName).
+		// 	Find(&existingDailys).Error; err != nil {
+		// 		c.JSON(http.StatusNotFound, gin.H{"error": "Dailys not found2"})
+		// 		return
+		// 	}
+
+
+        var updatedHourlys mypackage.Hourlys
+		updatedHourlys.ID = existingHourlys.ID
+		fmt.Println(updatedHourlys.ID)
+		var cityName string = "Almaty"
+
+		resp, err := http.Get("https://pro.openweathermap.org/data/2.5/forecast/hourly?q=" + cityName + "&appid=51e51b22fb137270e2e89bd2bc7c4acc&units=metric")
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer resp.Body.Close()
+
+		// Чтение ответа
+		byteResult, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		json.Unmarshal(byteResult, &updatedHourlys)
+
+
+
+        // Update the existing user with the new data
+		for i:=0;i<7;i++ {
+			updatedHourlys.Hourly[i].HourlyId = existingHourlys.Hourly[i].HourlyId
+			updatedHourlys.Hourly[i].ParentID = existingHourlys.Hourly[i].ParentID
+			updatedHourlys.Hourly[i].WeathersHourly[0].WeatherHourlyID = existingHourlys.Hourly[i].WeathersHourly[0].WeatherHourlyID
+			updatedHourlys.Hourly[i].MainParametersHourly.MainHourlyID = existingHourlys.Hourly[i].MainParametersHourly.MainHourlyID
+		}
+        existingHourlys = updatedHourlys
+
+        // Save the updated user to the database
+        DB.Save(&existingHourlys)
+		// DB.Model(&existingDailys).Updates(updatedDailys)
+
+		// if err := DB.Session(&gorm.Session{FullSaveAssociations: true}).Updates(&existingDailys).Error; err != nil {
+		// 	c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update the current"})
+		// 	return
+		// }
+
+        // Return the updated user in the response
+        c.JSON(http.StatusOK, existingHourlys)
+	})
 	r.PUT("/allCurrent/:name", func(c *gin.Context) {
         currentName := c.Param("name")
 

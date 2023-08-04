@@ -30,19 +30,19 @@ func Init() *gorm.DB {
 
 
 	//hourly / 96 hours
-	// db.AutoMigrate(&mypackage.CityHourly{})
-	// db.AutoMigrate(&mypackage.WeathersHourly{})
-	// db.AutoMigrate(&mypackage.MainParametersHourly{})
-	// db.AutoMigrate(&mypackage.Hourly{})
-	// db.AutoMigrate(&mypackage.Hourlys{})
+	db.AutoMigrate(&mypackage.CityHourly{})
+	db.AutoMigrate(&mypackage.WeathersHourly{})
+	db.AutoMigrate(&mypackage.MainParametersHourly{})
+	db.AutoMigrate(&mypackage.Hourly{})
+	db.AutoMigrate(&mypackage.Hourlys{})
 
 
 	//daily / 7 days
-	db.AutoMigrate(&mypackage.MainParametersDaily{})
-	db.AutoMigrate(&mypackage.WeathersDaily{})
-	db.AutoMigrate(&mypackage.City{})
-	db.AutoMigrate(&mypackage.Daily{})
-	db.AutoMigrate(&mypackage.Dailys{})
+	// db.AutoMigrate(&mypackage.MainParametersDaily{})
+	// db.AutoMigrate(&mypackage.WeathersDaily{})
+	// db.AutoMigrate(&mypackage.City{})
+	// db.AutoMigrate(&mypackage.Daily{})
+	// db.AutoMigrate(&mypackage.Dailys{})
 
 
 
