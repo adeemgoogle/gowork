@@ -73,9 +73,9 @@ func main() {
 			"message": "pong",
 		})
 	})
-	r.POST("/createCurrent", func(c *gin.Context)  {
-		var cityName string = "Almaty"
-		// mypackage.CurrentData(cityName, DB)
+	r.POST("/createCurrent/:name", func(c *gin.Context)  {
+		cityName := c.Param("name")
+
 	
 		// city10 := []string{"Almaty", "London", "Astana", "Moscow", "Madrid"}
 	
@@ -104,8 +104,8 @@ func main() {
 		c.JSON(http.StatusCreated, Currents)
 	})
 	r.POST("/createDaily", func(c *gin.Context)  {
-		var cityName string = "Almaty"
-		// mypackage.CurrentData(cityName, DB)
+        cityName := c.Param("name")
+
 	
 		// city10 := []string{"Almaty", "London", "Astana", "Moscow", "Madrid"}
 	
@@ -151,9 +151,9 @@ func main() {
 	
 		c.JSON(http.StatusCreated, dailys)
 	})
-	r.POST("/createHourly", func(c *gin.Context)  {
-		var cityName string = "Almaty"
-		// mypackage.CurrentData(cityName, DB)
+	r.POST("/createHourly/:name", func(c *gin.Context)  {
+        cityName := c.Param("name")
+
 	
 		// city10 := []string{"Almaty", "London", "Astana", "Moscow", "Madrid"}
 	
