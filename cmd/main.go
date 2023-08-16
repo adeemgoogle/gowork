@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"github.com/adeemgoogle/gowork/Serv"
@@ -55,33 +55,10 @@ func main() {
 
 
 	r := gin.Default()
-	// r.POST("/createCurrent", createCurrentHandler)
-	// r.POST("/api/createHourly", createHourlyHandler)
 	// r.POST("/api/createDaily", createDailyHandler)
-	r.GET("/pong", func(c *gin.Context) {
-		// var cityName string = "Almaty"
-		// mypackage.CurrentData(cityName, DB)
-
-
-		city10 := []string{"Almaty", "London", "Nur-Sultan", "Moscow"}
-
-		for i := 0; i<4;i++{
-			mypackage.CurrentData(city10[i], DB)
-		}
-
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
 	r.POST("/createCurrent/:name", func(c *gin.Context)  {
 		cityName := c.Param("name")
 
-	
-		// city10 := []string{"Almaty", "London", "Astana", "Moscow", "Madrid"}
-	
-		// for i := 0; i<5;i++{
-		// 	mypackage.CurrentData(city10[i], DB)
-		// }
 	
 		resp, err := http.Get("https://pro.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=51e51b22fb137270e2e89bd2bc7c4acc&units=metric")
 		if err != nil {
