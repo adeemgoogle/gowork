@@ -14,7 +14,7 @@ import (
 
 type Hourlys struct {
 	ID         uint   `gorm:"primaryKey;autoIncrement"`
-	Hourlys    []Hourly   `json:"list"  gorm:"foreignKey: ParentID"`
+	Hourly    []Hourly   `json:"list"  gorm:"foreignKey: ParentID"`
 	CityHourly CityHourly `json:"city" gorm:"foreignKey: CityHourlyID"`
 }
 type CityHourly struct {

@@ -46,6 +46,7 @@ func Init() *gorm.DB {
 	fmt.Println("🚀 Connected Successfully to the Database")
 
 	// current
+<<<<<<< HEAD:src/database/db.go
 <<<<<<< Updated upstream
 	db.AutoMigrate(&mypackage.CloudsCurrent{})
 	db.AutoMigrate(&mypackage.InfoSunCurrent{})
@@ -61,14 +62,22 @@ func Init() *gorm.DB {
 	db.AutoMigrate(&current.WeathersCurrent{})
 	db.AutoMigrate(&current.WeathersCurrent{})
 >>>>>>> Stashed changes
+=======
+	// db.AutoMigrate(&mypackage.CloudsCurrent{})
+	// db.AutoMigrate(&mypackage.InfoSunCurrent{})
+	// db.AutoMigrate(&mypackage.MainParametersCurrent{})
+	// db.AutoMigrate(&mypackage.WindCurrent{})
+	// db.AutoMigrate(&mypackage.WeathersCurrent{})
+	// db.AutoMigrate(&mypackage.Current{})
+>>>>>>> 783bd24564fe6e5f6f3f265b27729599ba7acac5:Serv/db.go
 
 
 	//hourly / 96 hours
-	// db.AutoMigrate(&mypackage.CityHourly{})
-	// db.AutoMigrate(&mypackage.WeathersHourly{})
-	// db.AutoMigrate(&mypackage.MainParametersHourly{})
-	// db.AutoMigrate(&mypackage.Hourly{})
-	// db.AutoMigrate(&mypackage.Hourlys{})
+	db.AutoMigrate(&mypackage.CityHourly{})
+	db.AutoMigrate(&mypackage.WeathersHourly{})
+	db.AutoMigrate(&mypackage.MainParametersHourly{})
+	db.AutoMigrate(&mypackage.Hourly{})
+	db.AutoMigrate(&mypackage.Hourlys{})
 
 
 	//daily / 7 days
