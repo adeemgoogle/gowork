@@ -2,7 +2,7 @@ package Serv
 
 import (
 	"fmt"
-	"github.com/adeemgoogle/gowork/mypackage"
+	"github.com/adeemgoogle/gowork/pkg"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
