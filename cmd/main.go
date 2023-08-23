@@ -1,39 +1,20 @@
 package main
 
 import (
-	"github.com/adeemgoogle/gowork/Serv"
-	"github.com/adeemgoogle/gowork/mypackage"
-	"gorm.io/gorm"
-	"github.com/gin-gonic/gin"
-	"net/http"
-	"io/ioutil"
-	"log"
 	"encoding/json"
 	"fmt"
+	"github.com/adeemgoogle/gowork/mypackage"
+	Serv "github.com/adeemgoogle/gowork/src/database"
+	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
+	"io/ioutil"
+	"log"
+	"net/http"
 )
 
 var DB *gorm.DB
 
 
-
-
-// func createHourlyHandler(c *gin.Context) {
-//     var cityName string = "Almaty"
-// 	mypackage.HourlyData(cityName, DB)
-
-// 	c.JSON(200, gin.H{
-// 		"message": "ping",
-// 	})
-// }
-
-// func createDailyHandler(c *gin.Context) {
-//     var cityName string = "Almaty"
-// 	mypackage.DailyData(cityName, DB)
-
-// 	c.JSON(200, gin.H{
-// 		"message": "ping",
-// 	})
-// }
 
 func main() {
 	// var cityName string = "Almaty"
@@ -41,47 +22,13 @@ func main() {
 
 	DB := Serv.Init()
 
-	//migrations
-	//daily / 7 days  
-	// DB.AutoMigrate(&mypackage.MainParametersDaily{}, &mypackage.WeathersDaily{}, &mypackage.City{}, &mypackage.Daily{},&mypackage.Dailys{})
-
-	//hourly / 96 hours
-	// DB.AutoMigrate(&mypackage.CityHourly{}, &mypackage.WeathersHourly{}, &mypackage.MainParametersHourly{}, &mypackage.Hourly{}, &mypackage.Hourlys{})
-
-	// current
-	// DB.AutoMigrate(&mypackage.CloudsCurrent{}, &mypackage.InfoSunCurrent{}, &mypackage.MainParametersCurrent{}, &mypackage.WindCurrent{}, &mypackage.WeathersCurrent{}, &mypackage.Current{})
-
-
-
 
 	r := gin.Default()
-	// r.POST("/createCurrent", createCurrentHandler)
-	// r.POST("/api/createHourly", createHourlyHandler)
-	// r.POST("/api/createDaily", createDailyHandler)
-	r.GET("/pong", func(c *gin.Context) {
-		// var cityName string = "Almaty"
-		// mypackage.CurrentData(cityName, DB)
 
 
-		city10 := []string{"Almaty", "London", "Nur-Sultan", "Moscow"}
-
-		for i := 0; i<4;i++{
-			mypackage.CurrentData(city10[i], DB)
-		}
-
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
 	r.POST("/createCurrent/:name", func(c *gin.Context)  {
 		cityName := c.Param("name")
 
-	
-		// city10 := []string{"Almaty", "London", "Astana", "Moscow", "Madrid"}
-	
-		// for i := 0; i<5;i++{
-		// 	mypackage.CurrentData(city10[i], DB)
-		// }
 	
 		resp, err := http.Get("https://pro.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=51e51b22fb137270e2e89bd2bc7c4acc&units=metric")
 		if err != nil {
@@ -106,12 +53,6 @@ func main() {
 	r.POST("/createDaily", func(c *gin.Context)  {
         cityName := c.Param("name")
 
-	
-		// city10 := []string{"Almaty", "London", "Astana", "Moscow", "Madrid"}
-	
-		// for i := 0; i<5;i++{
-		// 	mypackage.CurrentData(city10[i], DB)
-		// }
 	
 		resp, err := http.Get("https://pro.openweathermap.org/data/2.5/forecast/daily?q=" + cityName + "&appid=51e51b22fb137270e2e89bd2bc7c4acc&units=metric")
 		if err != nil {
@@ -154,13 +95,6 @@ func main() {
 	r.POST("/createHourly/:name", func(c *gin.Context)  {
         cityName := c.Param("name")
 
-	
-		// city10 := []string{"Almaty", "London", "Astana", "Moscow", "Madrid"}
-	
-		// for i := 0; i<5;i++{
-		// 	mypackage.CurrentData(city10[i], DB)
-		// }
-	
 		resp, err := http.Get("https://pro.openweathermap.org/data/2.5/forecast/hourly?q=" + cityName + "&appid=51e51b22fb137270e2e89bd2bc7c4acc&units=metric")
 		if err != nil {
 			log.Fatal(err)
@@ -204,18 +138,6 @@ func main() {
 			return
 		}
 
-		// if err := DB.Table("dailys").
-		// 	// Select("dailys.*, cities.*, dailys.id as id, weathers_dailies.*, main_parameters_dailies.*").
-		// 	Select("dailys.*, cities.name").
-		// 	Joins("LEFT JOIN cities ON dailys.id = cities.city_daily_id").
-		// 	Joins("LEFT JOIN dailies ON dailys.id = dailies.parent_daily_id").
-		// 	Joins("LEFT JOIN weathers_dailies ON dailys.id = weathers_dailies.weathers_daily_id").
-		// 	Joins("LEFT JOIN main_parameters_dailies ON dailys.id = main_parameters_dailies.main_parameters_daily_id").
-		// 	Where("cities.name = ?", dailysName).
-		// 	Find(&existingDailys).Error; err != nil {
-		// 		c.JSON(http.StatusNotFound, gin.H{"error": "Dailys not found2"})
-		// 		return
-		// 	}
 
 
         var updatedDailys mypackage.Dailys
@@ -252,12 +174,7 @@ func main() {
 
         // Save the updated user to the database
         DB.Save(&existingDailys)
-		// DB.Model(&existingDailys).Updates(updatedDailys)
 
-		// if err := DB.Session(&gorm.Session{FullSaveAssociations: true}).Updates(&existingDailys).Error; err != nil {
-		// 	c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update the current"})
-		// 	return
-		// }
 
         // Return the updated user in the response
         c.JSON(http.StatusOK, existingDailys)
@@ -273,8 +190,6 @@ func main() {
 			return
 		}
 
-
-
 		// Load the associated `Daily` and related data from the connected tables.
 		if err := DB.Preload("CityHourly").
 		Preload("Hourly.MainParametersHourly").
@@ -284,20 +199,6 @@ func main() {
 			c.JSON(http.StatusNotFound, gin.H{"error": "Dailys not found2"})
 			return
 		}
-
-		// if err := DB.Table("dailys").
-		// 	// Select("dailys.*, cities.*, dailys.id as id, weathers_dailies.*, main_parameters_dailies.*").
-		// 	Select("dailys.*, cities.name").
-		// 	Joins("LEFT JOIN cities ON dailys.id = cities.city_daily_id").
-		// 	Joins("LEFT JOIN dailies ON dailys.id = dailies.parent_daily_id").
-		// 	Joins("LEFT JOIN weathers_dailies ON dailys.id = weathers_dailies.weathers_daily_id").
-		// 	Joins("LEFT JOIN main_parameters_dailies ON dailys.id = main_parameters_dailies.main_parameters_daily_id").
-		// 	Where("cities.name = ?", dailysName).
-		// 	Find(&existingDailys).Error; err != nil {
-		// 		c.JSON(http.StatusNotFound, gin.H{"error": "Dailys not found2"})
-		// 		return
-		// 	}
-
 
         var updatedHourlys mypackage.Hourlys
 		updatedHourlys.ID = existingHourlys.ID
@@ -331,12 +232,7 @@ func main() {
 
         // Save the updated user to the database
         DB.Save(&existingHourlys)
-		// DB.Model(&existingDailys).Updates(updatedDailys)
 
-		// if err := DB.Session(&gorm.Session{FullSaveAssociations: true}).Updates(&existingDailys).Error; err != nil {
-		// 	c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update the current"})
-		// 	return
-		// }
 
         // Return the updated user in the response
         c.JSON(http.StatusOK, existingHourlys)
@@ -390,18 +286,11 @@ func main() {
         c.JSON(http.StatusOK, existingCurrent)
     })
 
-	// r.GET("/daily", func(c *gin.Context) {
-	// 	var cityName string = "Almaty"
-	// 	mypackage.DailyData(cityName, DB)
 
-	// 	c.JSON(200, gin.H{
-	// 		"message": "pong",
-	// 	})
-	// })
 
 	r.Run() // listen and serve on 0.0.0.0:8080
 
-	// Serv.Close(DB)
+	
 }
 
 
