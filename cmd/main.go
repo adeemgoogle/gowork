@@ -15,6 +15,7 @@ func main() {
 	controllers.PutHourlyData(r)
 	controllers.PostDailyData(r)
 	controllers.PutDailyData(r)
-	r.Run() // listen and serve on 0.0.0.0:8080
+	controllers.RunAPI(r)
+	r.Run("localhost:8080") // listen and serve on 0.0.0.0:8080
 
 }
