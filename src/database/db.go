@@ -2,8 +2,6 @@ package Serv
 
 import (
 	"fmt"
-
-	//"github.com/adeemgoogle/gowork/pkg"
 	"log"
 	"os"
 
@@ -27,9 +25,9 @@ func Init() *gorm.DB {
 	var dbhost, dbport, dbname, dbuser, dbpass string
 	dbhost = getEnv("DATABASE_HOST", "localhost")
 	dbport = getEnv("DATABASE_PORT", "5432")
-	dbname = getEnv("DATABASE_NAME", "weather")
+	dbname = getEnv("DATABASE_NAME", "postgres")
 	dbuser = getEnv("DATABASE_USERNAME", "postgres")
-	dbpass = getEnv("DATABASE_PASSWORD", "123")
+	dbpass = getEnv("DATABASE_PASSWORD", "admin")
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Almaty", dbhost, dbuser, dbpass, dbname, dbport)
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
@@ -69,11 +67,11 @@ func Init() *gorm.DB {
 	db.AutoMigrate(&modell.Hourlys{})
 
 	//daily / 7 days
-	// db.AutoMigrate(&mypackage.MainParametersDaily{})
-	// db.AutoMigrate(&mypackage.WeathersDaily{})
-	// db.AutoMigrate(&mypackage.City{})
-	// db.AutoMigrate(&mypackage.Daily{})
-	// db.AutoMigrate(&mypackage.Dailys{})
+	db.AutoMigrate(&modell.MainParametersDaily{})
+	db.AutoMigrate(&modell.WeathersDaily{})
+	db.AutoMigrate(&modell.City{})
+	db.AutoMigrate(&modell.Daily{})
+	db.AutoMigrate(&modell.Dailys{})
 
 	return db
 }
