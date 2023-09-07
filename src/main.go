@@ -48,7 +48,7 @@ func InitHandler(conf config.Config) *handler.Handler {
 		log.Fatalf("[ERROR] migaration: %v", err)
 	}
 
-	weatherCli := httpClient.NewClient(conf.WeatherURL)
+	weatherCli := httpClient.NewClient(conf.WeatherBaseURL)
 	weatherSrv := weather.NewService(ds.WeatherRepository(), weatherCli)
 
 	h := handler.NewHandler(weatherSrv, conf)
@@ -72,7 +72,7 @@ func InitRouter(h *handler.Handler, production bool) *gin.Engine {
 
 	// группа /api/v1 содержит ендпойнты первой версии
 	apiv1 := r.Group("/api/v1")
-	apiv1.GET("/current", h.GetCurrentData)
+	apiv1.GET("/weather", h.GetAllWeatherData)
 
 	return r
 }

@@ -1,16 +1,19 @@
 package handler
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
-// GetCurrentData -
-func (h *Handler) GetCurrentData(ctx *gin.Context) {
+// GetAllWeatherData - ендпойнт для получения всех данных о погоде
+func (h *Handler) GetAllWeatherData(ctx *gin.Context) {
 	location := ctx.DefaultQuery("location", "Almaty")
-	err := h.weatherService.GetCurrentData(ctx, h.config, location)
+	resp, err := h.weatherService.GetAllWeatherData(ctx, h.config, location)
 	if err != nil {
-		fmt.Println("Errors: ", err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
+	ctx.JSON(http.StatusOK, resp)
+	return
 }
