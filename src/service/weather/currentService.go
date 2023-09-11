@@ -44,6 +44,8 @@ func (s Service) updateCurrentData(ctx context.Context, config config.Config, lo
 		FeelsLike:    rsCurrent.Main.FeelsLike,
 		Date:         date,
 		WeatherTypes: weatherTypes,
+		WindSpeed: rsCurrent.Wind.Speed,
+		WindDeg: rsCurrent.Wind.Deg,
 	}
 	entity, err = s.weatherRepo.SaveCurrent(entity)
 	if err != nil {

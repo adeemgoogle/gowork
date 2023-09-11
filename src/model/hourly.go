@@ -6,10 +6,10 @@ import (
 
 type Hourly struct {
 	Id           int64          `gorm:"primaryKey, autoIncrement"`
-	Location     string         `gorm:"not null"`
+	Location     string         `gorm:"not null, index:location_date_index"`
 	Temp         float64        `gorm:"not null"`
 	FeelsLike    float64        `gorm:"not null"`
-	Date         time.Time      `gorm:"not null"`
+	Date         time.Time      `gorm:"not null, index:location_date_index"`
 	WeatherTypes []*WeatherType `gorm:"many2many:hourly_weather_types"`
 }
 

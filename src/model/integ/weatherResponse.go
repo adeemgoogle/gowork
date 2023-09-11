@@ -22,4 +22,5 @@ type RsMain struct {
 	GrndLevel int     `json:"grnd_level"`
 	Humidity  int     `json:"humidity"`
 	TempKf    float64 `json:"temp_kf"`
+	Sunrise   int      `json:"sunrise"`
 }
