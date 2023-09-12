@@ -28,19 +28,40 @@ func NewService(weatherRepo drivers.WeatherRepository, weatherClient *httpClient
 
 // GetAllWeatherData - сервис для получения всех данных о погоде
 func (s Service) GetAllWeatherData(ctx context.Context, config config.Config, location string) (*dto.WeatherDto, error) {
-	current, err := s.checkAndGetCurrent(ctx, config, location)
-	if current == nil || err != nil {
-		return nil, err
+	var current *model.Current
+	var hourlies []model.Hourly
+	var climates []model.Climate
+	var currentErr, hourliesErr, climatesErr error
+
+	// Запускаем goroutines для каждого метода
+	go func() {
+		current, currentErr = s.checkAndGetCurrent(ctx, config, location)
+	}()
+
+	go func() {
+		hourlies, hourliesErr = s.checkAndGetHourlies(ctx, config, location)
+	}()
+
+	go func() {
+		climates, climatesErr = s.checkAndGetClimates(ctx, config, location)
+	}()
+
+	// Ожидаем завершения всех goroutines
+	for i := 0; i < 3; i++ {
+		<-time.After(time.Second * 5) // Ограничиваем время ожидания каждой goroutine
 	}
 
-	hourlies, err := s.checkAndGetHourlies(ctx, config, location)
-	if err != nil {
-		return nil, err
+	// Проверяем ошибки после завершения всех goroutines
+	if currentErr != nil {
+		return nil, currentErr
 	}
 
-	climates, err := s.checkAndGetClimates(ctx, config, location)
-	if err != nil {
-		return nil, err
+	if hourliesErr != nil {
+		return nil, hourliesErr
+	}
+
+	if climatesErr != nil {
+		return nil, climatesErr
 	}
 
 	return buildWeatherDto(*current, hourlies, climates), nil
