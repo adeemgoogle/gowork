@@ -5,14 +5,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/adeemgoogle/gowork/src/config"
 	"github.com/adeemgoogle/gowork/src/model"
 	"github.com/adeemgoogle/gowork/src/model/integ"
 	"time"
 )
 
 // checkAndGetHourlies - проверка и получения почасовых прогноз на 4 дня
-func (s Service) checkAndGetHourlies(ctx context.Context, config config.Config, location string) ([]model.Hourly, error) {
+func (s Service) checkAndGetHourlies(ctx context.Context, location string) ([]model.Hourly, error) {
 	hourlies, err := s.weatherRepo.GetHourliesByLocation(location)
 	if err != nil {
 		return nil, err
@@ -29,12 +28,12 @@ func (s Service) checkAndGetHourlies(ctx context.Context, config config.Config, 
 		}
 	}
 
-	return s.updateHourliesData(ctx, config, location, hourlies)
+	return s.updateHourliesData(ctx, location, hourlies)
 }
 
 // GetHourliesData - обновления почасовых прогноз на 4 дня
-func (s Service) updateHourliesData(ctx context.Context, config config.Config, location string, hourlies []model.Hourly) ([]model.Hourly, error) {
-	rsHourly, err := s.sendHourlyRequest(ctx, config, location)
+func (s Service) updateHourliesData(ctx context.Context, location string, hourlies []model.Hourly) ([]model.Hourly, error) {
+	rsHourly, err := s.sendHourlyRequest(ctx, location)
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +44,7 @@ func (s Service) updateHourliesData(ctx context.Context, config config.Config, l
 
 		if lastHourly != nil {
 			if date.After(lastHourly.Date) {
-				weatherTypes, err := s.getWeatherTypes(ctx, config, r.Weather)
+				weatherTypes, err := s.getWeatherTypes(r.Weather)
 				if err != nil {
 					return nil, err
 				}
@@ -63,7 +62,7 @@ func (s Service) updateHourliesData(ctx context.Context, config config.Config, l
 				}
 			}
 		} else {
-			weatherTypes, err := s.getWeatherTypes(ctx, config, r.Weather)
+			weatherTypes, err := s.getWeatherTypes(r.Weather)
 			if err != nil {
 				return nil, err
 			}
@@ -91,8 +90,8 @@ func (s Service) updateHourliesData(ctx context.Context, config config.Config, l
 }
 
 // sendCurrentRequest - запрос почасовых прогноз на 4 дня
-func (s Service) sendHourlyRequest(ctx context.Context, config config.Config, location string) (*integ.RsHourly, error) {
-	url := "/forecast/hourly?q=" + location + "&units=metric&appid=" + config.WeatherAppId
+func (s Service) sendHourlyRequest(ctx context.Context, location string) (*integ.RsHourly, error) {
+	url := "/forecast/hourly?q=" + location + "&units=metric&appid=" + s.config.WeatherAppId
 	resp, err := s.weatherClient.Get(ctx, url)
 	if err != nil {
 		return nil, err

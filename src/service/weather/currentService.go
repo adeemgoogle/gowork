@@ -5,14 +5,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/adeemgoogle/gowork/src/config"
 	"github.com/adeemgoogle/gowork/src/model"
 	"github.com/adeemgoogle/gowork/src/model/integ"
 	"time"
 )
 
 // checkAndGetCurrent - проверка и получения текущих погодных данных
-func (s Service) checkAndGetCurrent(ctx context.Context, config config.Config, location string) (*model.Current, error) {
+func (s Service) checkAndGetCurrent(ctx context.Context, location string) (*model.Current, error) {
 	current, err := s.weatherRepo.GetCurrentByLocation(location)
 	if err != nil {
 		return nil, err
@@ -21,17 +20,17 @@ func (s Service) checkAndGetCurrent(ctx context.Context, config config.Config, l
 	if time.Now().Sub(current.Date) < time.Hour {
 		return &current, nil
 	}
-	return s.updateCurrentData(ctx, config, location, current)
+	return s.updateCurrentData(ctx, location, current)
 }
 
 // GetCurrentData - обновления текущих погодных данных
-func (s Service) updateCurrentData(ctx context.Context, config config.Config, location string, current model.Current) (*model.Current, error) {
-	rsCurrent, err := s.sendCurrentRequest(ctx, config, location)
+func (s Service) updateCurrentData(ctx context.Context, location string, current model.Current) (*model.Current, error) {
+	rsCurrent, err := s.sendCurrentRequest(ctx, location)
 	if err != nil {
 		return nil, err
 	}
 
-	weatherTypes, err := s.getWeatherTypes(ctx, config, rsCurrent.Weather)
+	weatherTypes, err := s.getWeatherTypes(rsCurrent.Weather)
 	if err != nil {
 		return nil, err
 	}
@@ -54,8 +53,8 @@ func (s Service) updateCurrentData(ctx context.Context, config config.Config, lo
 }
 
 // sendCurrentRequest - запрос текущих погодных данных
-func (s Service) sendCurrentRequest(ctx context.Context, config config.Config, location string) (*integ.RsCurrent, error) {
-	url := "/weather?q=" + location + "&units=metric&appid=" + config.WeatherAppId
+func (s Service) sendCurrentRequest(ctx context.Context, location string) (*integ.RsCurrent, error) {
+	url := "/weather?q=" + location + "&units=metric&appid=" + s.config.WeatherAppId
 	resp, err := s.weatherClient.Get(ctx, url)
 	if err != nil {
 		return nil, err

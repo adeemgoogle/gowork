@@ -11,23 +11,25 @@ import (
 )
 
 type IService interface {
-	GetAllWeatherData(ctx context.Context, config config.Config, location string) (*dto.WeatherDto, error)
+	GetAllWeatherData(ctx context.Context, location string) (*dto.WeatherDto, error)
 }
 
 type Service struct {
+	config        config.Config
 	weatherRepo   drivers.WeatherRepository
 	weatherClient *httpClient.Client
 }
 
-func NewService(weatherRepo drivers.WeatherRepository, weatherClient *httpClient.Client) *Service {
+func NewService(config config.Config, weatherRepo drivers.WeatherRepository, weatherClient *httpClient.Client) *Service {
 	return &Service{
+		config:        config,
 		weatherRepo:   weatherRepo,
 		weatherClient: weatherClient,
 	}
 }
 
 // GetAllWeatherData - сервис для получения всех данных о погоде
-func (s Service) GetAllWeatherData(ctx context.Context, config config.Config, location string) (*dto.WeatherDto, error) {
+func (s Service) GetAllWeatherData(ctx context.Context, location string) (*dto.WeatherDto, error) {
 	var current *model.Current
 	var hourlies []model.Hourly
 	var climates []model.Climate
@@ -35,15 +37,15 @@ func (s Service) GetAllWeatherData(ctx context.Context, config config.Config, lo
 
 	// Запускаем goroutines для каждого метода
 	go func() {
-		current, currentErr = s.checkAndGetCurrent(ctx, config, location)
+		current, currentErr = s.checkAndGetCurrent(ctx, location)
 	}()
 
 	go func() {
-		hourlies, hourliesErr = s.checkAndGetHourlies(ctx, config, location)
+		hourlies, hourliesErr = s.checkAndGetHourlies(ctx, location)
 	}()
 
 	go func() {
-		climates, climatesErr = s.checkAndGetClimates(ctx, config, location)
+		climates, climatesErr = s.checkAndGetClimates(ctx, location)
 	}()
 
 	// Ожидаем завершения всех goroutines
