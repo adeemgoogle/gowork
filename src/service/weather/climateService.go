@@ -5,14 +5,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/adeemgoogle/gowork/src/config"
 	"github.com/adeemgoogle/gowork/src/model"
 	"github.com/adeemgoogle/gowork/src/model/integ"
 	"time"
 )
 
 // checkAndGetClimates - проверка и получения прогноза климата на 30 дней
-func (s Service) checkAndGetClimates(ctx context.Context, config config.Config, location string) ([]model.Climate, error) {
+func (s Service) checkAndGetClimates(ctx context.Context, location string) ([]model.Climate, error) {
 	climates, err := s.weatherRepo.GetClimatesByLocation(location)
 	if err != nil {
 		return nil, err
@@ -29,12 +28,12 @@ func (s Service) checkAndGetClimates(ctx context.Context, config config.Config, 
 		}
 	}
 
-	return s.updateClimatesData(ctx, config, location, climates)
+	return s.updateClimatesData(ctx, location, climates)
 }
 
 // updateClimatesData - обновления прогноза климата на 30 дней
-func (s Service) updateClimatesData(ctx context.Context, config config.Config, location string, climates []model.Climate) ([]model.Climate, error) {
-	rsClimate, err := s.sendClimateRequest(ctx, config, location)
+func (s Service) updateClimatesData(ctx context.Context, location string, climates []model.Climate) ([]model.Climate, error) {
+	rsClimate, err := s.sendClimateRequest(ctx, location)
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +44,7 @@ func (s Service) updateClimatesData(ctx context.Context, config config.Config, l
 
 		if lastClimate != nil {
 			if date.After(lastClimate.Date) {
-				weatherTypes, err := s.getWeatherTypes(ctx, config, r.Weather)
+				weatherTypes, err := s.getWeatherTypes(r.Weather)
 				if err != nil {
 					return nil, err
 				}
@@ -63,7 +62,7 @@ func (s Service) updateClimatesData(ctx context.Context, config config.Config, l
 				}
 			}
 		} else {
-			weatherTypes, err := s.getWeatherTypes(ctx, config, r.Weather)
+			weatherTypes, err := s.getWeatherTypes(r.Weather)
 			if err != nil {
 				return nil, err
 			}
@@ -91,8 +90,8 @@ func (s Service) updateClimatesData(ctx context.Context, config config.Config, l
 }
 
 // sendClimateRequest - запрос прогноза климата на 30 дней
-func (s Service) sendClimateRequest(ctx context.Context, config config.Config, location string) (*integ.RsClimate, error) {
-	url := "/forecast/climate?q=" + location + "&units=metric&appid=" + config.WeatherAppId
+func (s Service) sendClimateRequest(ctx context.Context, location string) (*integ.RsClimate, error) {
+	url := "/forecast/climate?q=" + location + "&units=metric&appid=" + s.config.WeatherAppId
 	resp, err := s.weatherClient.Get(ctx, url)
 	if err != nil {
 		return nil, err

@@ -49,7 +49,7 @@ func InitHandler(conf config.Config) *handler.Handler {
 	}
 
 	weatherCli := httpClient.NewClient(conf.WeatherBaseURL)
-	weatherSrv := weather.NewService(ds.WeatherRepository(), weatherCli)
+	weatherSrv := weather.NewService(conf, ds.WeatherRepository(), weatherCli)
 
 	h := handler.NewHandler(weatherSrv, conf)
 	return h
