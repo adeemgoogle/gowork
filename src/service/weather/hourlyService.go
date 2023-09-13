@@ -5,9 +5,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"time"
+
 	"github.com/adeemgoogle/gowork/src/model"
 	"github.com/adeemgoogle/gowork/src/model/integ"
-	"time"
 )
 
 // checkAndGetHourlies - проверка и получения почасовых прогноз на 4 дня
@@ -20,7 +21,7 @@ func (s Service) checkAndGetHourlies(ctx context.Context, location string) ([]mo
 	// удаляет старые данные
 	currentDate := time.Now()
 	for _, hourly := range hourlies {
-		if hourly.Date.Before(currentDate) {
+		if reconverTimezone(hourly.Date, hourly.Timezone).Before(currentDate) {
 			err = s.weatherRepo.DeleteHourly(hourly)
 			if err != nil {
 				return nil, err
