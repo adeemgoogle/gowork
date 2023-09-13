@@ -56,6 +56,7 @@ func buildWeatherDto(current model.Current, hourlies []model.Hourly, climates []
 		Date:         current.Date,
 		WindSpeed: 	 current.WindSpeed,
 		WindDeg: current.WindDeg,
+		Visibility: current.Visibility,
 		WeatherTypes: buildWeatherTypesDto(current.WeatherTypes),
 	}
 
@@ -81,7 +82,13 @@ func buildWeatherDto(current model.Current, hourlies []model.Hourly, climates []
 			Temp:         climate.Temp,
 			FeelsLike:    climate.FeelsLike,
 			Date:         climate.Date,
+			Sunrise: climate.Sunrise,
+			Sunset: climate.Sunset,
+			Humidity: climate.Humidity,
+			Pressure: climate.Pressure,
 			WeatherTypes: buildWeatherTypesDto(climate.WeatherTypes),
+			MinTemp: climate.MinTemp,
+			MaxTemp: climate.MaxTemp,
 		}
 
 		climatesDto = append(climatesDto, climateDto)

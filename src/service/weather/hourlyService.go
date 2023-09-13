@@ -56,6 +56,7 @@ func (s Service) updateHourliesData(ctx context.Context, config config.Config, l
 					FeelsLike:    r.Main.FeelsLike,
 					Date:         date,
 					WeatherTypes: weatherTypes,
+					//Sunrise: ,
 				}
 				_, err = s.weatherRepo.CreateHourly(entity)
 				if err != nil {

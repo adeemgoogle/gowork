@@ -56,6 +56,12 @@ func (s Service) updateClimatesData(ctx context.Context, config config.Config, l
 					FeelsLike:    r.FeelsLike.Day,
 					Date:         date,
 					WeatherTypes: weatherTypes,
+					Sunrise: r.Sunrise,
+					Sunset: r.Sunset,
+					Humidity: r.Humidity,
+					Pressure: r.Pressure,
+					MaxTemp: r.Temp.Max,
+					MinTemp: r.Temp.Min,
 				}
 				_, err = s.weatherRepo.CreateClimate(entity)
 				if err != nil {
@@ -74,6 +80,12 @@ func (s Service) updateClimatesData(ctx context.Context, config config.Config, l
 				FeelsLike:    r.FeelsLike.Day,
 				Date:         date,
 				WeatherTypes: weatherTypes,
+				Sunrise: r.Sunrise,
+				Sunset: r.Sunset,
+				Humidity: r.Humidity,
+				Pressure: r.Pressure,
+				MaxTemp: r.Temp.Max,
+				MinTemp: r.Temp.Min,
 			}
 			_, err = s.weatherRepo.CreateClimate(entity)
 			if err != nil {

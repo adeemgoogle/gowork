@@ -24,7 +24,7 @@ type RsClimateCoordInfo struct {
 
 type RsClimateWeatherData struct {
 	Dt        int64                    `json:"dt"`
-	Sunrise   float64                   `json:"sunrise"`
+	Sunrise   int64                    `json:"sunrise"`
 	Sunset    int64                    `json:"sunset"`
 	Temp      RsClimateTemperatureInfo `json:"temp"`
 	FeelsLike RsClimateFeelsLikeInfo   `json:"feels_like"`

@@ -1,6 +1,8 @@
 package dto
 
-import "time"
+import (
+	"time"
+)
 
 type WeatherDto struct {
 	Current  CurrentDto   `json:"current"`
@@ -15,8 +17,9 @@ type CurrentDto struct {
 	FeelsLike    float64          `json:"feelsLike"`
 	Date         time.Time        `json:"date"`
 	WeatherTypes []WeatherTypeDto `json:"weatherTypes"`
-	WindSpeed 		 float64 	  `json:"windSpeed"`
-	WindDeg 	float64 		  `json:"windDeg"`
+	WindSpeed 	 float64 	  	  `json:"windSpeed"`
+	WindDeg 	 float64 		  `json:"windDeg"`
+	Visibility   int 		      `json:"visibility"`
 }
 
 type HourlyDto struct {
@@ -26,6 +29,8 @@ type HourlyDto struct {
 	FeelsLike    float64          `json:"feelsLike"`
 	Date         time.Time        `json:"date"`
 	WeatherTypes []WeatherTypeDto `json:"weatherTypes"`
+	Sunrise 	int 				`json:"sunrise"`
+	Sunset 		int  				`json:"sunset"`
 }
 
 type ClimateDto struct {
@@ -35,7 +40,12 @@ type ClimateDto struct {
 	FeelsLike    float64          `json:"feelsLike"`
 	Date         time.Time        `json:"date"`
 	WeatherTypes []WeatherTypeDto `json:"weatherTypes"`
-	Sunrise int64 				  `json:"sunrise"`
+	Sunrise 	 int64 			  `json:"sunrise"`
+	Sunset       int64 			  `json:"sunset"`
+	Humidity     int 			  `json:"humidity"`
+	Pressure	 int 			  `json:"pressure"`
+	MinTemp		float64 	  	  `json:"MinTemp"`
+	MaxTemp 	float64 	  	  `json:"MaxTemp"`
 }
 
 type WeatherTypeDto struct {
