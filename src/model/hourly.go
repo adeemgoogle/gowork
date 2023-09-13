@@ -9,7 +9,7 @@ type Hourly struct {
 	Location     string         `gorm:"not null"`
 	Temp         float64        `gorm:"not null"`
 	FeelsLike    float64        `gorm:"not null"`
-	Date         time.Time      `gorm:"not null"`
+	Date         time.Time      `gorm:"type:timestamp without time zone"`
 	WeatherTypes []*WeatherType `gorm:"many2many:hourly_weather_types"`
 }
 
