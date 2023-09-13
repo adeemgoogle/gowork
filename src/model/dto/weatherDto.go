@@ -14,6 +14,7 @@ type CurrentDto struct {
 	Temp         float64          `json:"temp"`
 	FeelsLike    float64          `json:"feelsLike"`
 	Date         time.Time        `json:"date"`
+	Timezone     string           `json:"timezone"`
 	WeatherTypes []WeatherTypeDto `json:"weatherTypes"`
 }
 

@@ -2,12 +2,14 @@ package weather
 
 import (
 	"context"
+	"strconv"
+	"time"
+
 	httpClient "github.com/adeemgoogle/gowork/src/common/http"
 	"github.com/adeemgoogle/gowork/src/config"
 	"github.com/adeemgoogle/gowork/src/database/drivers"
 	"github.com/adeemgoogle/gowork/src/model"
 	"github.com/adeemgoogle/gowork/src/model/dto"
-	"time"
 )
 
 type IService interface {
@@ -54,6 +56,7 @@ func buildWeatherDto(current model.Current, hourlies []model.Hourly, climates []
 		Temp:         current.Temp,
 		FeelsLike:    current.FeelsLike,
 		Date:         current.Date,
+		Timezone:     current.Timezone,
 		WeatherTypes: buildWeatherTypesDto(current.WeatherTypes),
 	}
 
@@ -116,4 +119,31 @@ func convertDate(dateUnix int64, timeZone int) time.Time {
 
 	// преобразует дату Unix во временную точку с учетом временной зоны
 	return time.Unix(dateUnix, 0).In(timeLocation)
+}
+func converTimezone(timeZone int) string {
+	//преоброзуем timezone в string
+	time := strconv.Itoa(timeZone / 3600)
+	return "GMT " + time
+}
+func reconverTimezone(dateUTC time.Time, timeZone string) time.Time {
+	switch {
+	case len(timeZone) == 5:
+		//преобразуем timezone в int
+		intValue, _ := strconv.Atoi(string(timeZone[4]))
+		//пребразуем в часовой формат
+		utcTimeZone := time.Hour * time.Duration(intValue) * -1
+		//получаем отрезок времени с нужной временной зоной
+		result := dateUTC.Add(utcTimeZone)
+		return result
+	case len(timeZone) == 6:
+		//преобразуем timezone в int
+		intValue, _ := strconv.Atoi(string(timeZone[5]))
+		//пребразуем в часовой формат
+		utcTimeZone := time.Hour * time.Duration(intValue)
+		//получаем отрезок времени с нужной временной зоной
+		result := dateUTC.Add(utcTimeZone)
+		return result
+	default:
+		return dateUTC
+	}
 }

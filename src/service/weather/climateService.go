@@ -5,10 +5,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"time"
+
 	"github.com/adeemgoogle/gowork/src/config"
 	"github.com/adeemgoogle/gowork/src/model"
 	"github.com/adeemgoogle/gowork/src/model/integ"
-	"time"
 )
 
 // checkAndGetClimates - проверка и получения прогноза климата на 30 дней
@@ -21,7 +22,7 @@ func (s Service) checkAndGetClimates(ctx context.Context, config config.Config, 
 	// удаляет старые данные
 	currentDate := time.Now()
 	for _, climate := range climates {
-		if climate.Date.Before(currentDate) {
+		if reconverTimezone(climate.Date, climate.Timezone).Before(currentDate) {
 			err = s.weatherRepo.DeleteClimate(climate)
 			if err != nil {
 				return nil, err
