@@ -21,7 +21,7 @@ func (s Service) checkAndGetClimates(ctx context.Context, location string) ([]mo
 	// удаляет старые данные
 	currentDate := time.Now()
 	for _, climate := range climates {
-		if reconverTimezone(climate.Date, climate.Timezone).Before(currentDate) {
+		if reconvertTimezone(climate.Date, climate.Timezone).Before(currentDate) {
 			err = s.weatherRepo.DeleteClimate(climate)
 			if err != nil {
 				return nil, err

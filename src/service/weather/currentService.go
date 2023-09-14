@@ -17,7 +17,7 @@ func (s Service) checkAndGetCurrent(ctx context.Context, location string) (*mode
 	if err != nil {
 		return nil, err
 	}
-	if time.Now().Sub(reconverTimezone(current.Date, current.Timezone)) < time.Hour {
+	if time.Now().Sub(reconvertTimezone(current.Date, current.Timezone)) < time.Hour {
 		return &current, nil
 	}
 	return s.updateCurrentData(ctx, location, current)
@@ -34,7 +34,7 @@ func (s Service) updateCurrentData(ctx context.Context, location string, current
 	if err != nil {
 		return nil, err
 	}
-	timezone := converTimezone(rsCurrent.Timezone)
+	timezone := convertTimezone(rsCurrent.Timezone)
 	date := convertDate(rsCurrent.Dt, rsCurrent.Timezone)
 	entity := model.Current{
 		Id:           current.Id,

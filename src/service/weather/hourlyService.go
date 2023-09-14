@@ -21,7 +21,7 @@ func (s Service) checkAndGetHourlies(ctx context.Context, location string) ([]mo
 	// удаляет старые данные
 	currentDate := time.Now()
 	for _, hourly := range hourlies {
-		if reconverTimezone(hourly.Date, hourly.Timezone).Before(currentDate) {
+		if reconvertTimezone(hourly.Date, hourly.Timezone).Before(currentDate) {
 			err = s.weatherRepo.DeleteHourly(hourly)
 			if err != nil {
 				return nil, err

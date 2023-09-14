@@ -143,12 +143,12 @@ func convertDate(dateUnix int64, timeZone int) time.Time {
 	// преобразует дату Unix во временную точку с учетом временной зоны
 	return time.Unix(dateUnix, 0).In(timeLocation)
 }
-func converTimezone(timeZone int) string {
+func convertTimezone(timeZone int) string {
 	//преоброзуем timezone в string
 	time := strconv.Itoa(timeZone / 3600)
 	return "GMT " + time
 }
-func reconverTimezone(dateUTC time.Time, timeZone string) time.Time {
+func reconvertTimezone(dateUTC time.Time, timeZone string) time.Time {
 	switch {
 	case len(timeZone) == 5:
 		//преобразуем timezone в int
