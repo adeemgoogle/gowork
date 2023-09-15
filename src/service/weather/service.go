@@ -2,12 +2,14 @@ package weather
 
 import (
 	"context"
+	"strconv"
+	"time"
+
 	httpClient "github.com/adeemgoogle/gowork/src/common/http"
 	"github.com/adeemgoogle/gowork/src/config"
 	"github.com/adeemgoogle/gowork/src/database/drivers"
 	"github.com/adeemgoogle/gowork/src/model"
 	"github.com/adeemgoogle/gowork/src/model/dto"
-	"time"
 )
 
 type IService interface {
@@ -50,7 +52,7 @@ func (s Service) GetAllWeatherData(ctx context.Context, location string) (*dto.W
 
 	// Ожидаем завершения всех goroutines
 	for i := 0; i < 3; i++ {
-		<-time.After(time.Second * 5) // Ограничиваем время ожидания каждой goroutine
+		<-time.After(time.Second * 2) // Ограничиваем время ожидания каждой goroutine
 	}
 
 	// Проверяем ошибки после завершения всех goroutines
@@ -132,6 +134,12 @@ func buildWeatherTypesDto(weatherTypes []*model.WeatherType) []dto.WeatherTypeDt
 	return weatherTypesDto
 }
 
+// convertTimezone - метод для преоброзования таймзоны в строку
+func convertTimezone(timeZone int) string {
+	time := strconv.Itoa(timeZone / 3600)
+	return "GMT " + time
+}
+
 // convertDate - метод для преоброзования даты
 func convertDate(dateUnix int64, timeZone int) time.Time {
 	// временное местоположение, которое учитывает часовой пояс (в секундах от UTC)
@@ -139,4 +147,16 @@ func convertDate(dateUnix int64, timeZone int) time.Time {
 
 	// преобразует дату Unix во временную точку с учетом временной зоны
 	return time.Unix(dateUnix, 0).In(timeLocation)
+}
+
+// reconvertDate - метод преоброзования времени в таймзону системы
+func reconvertDate(dateUTC time.Time, timeZone string) time.Time {
+	offsetHours, err := strconv.Atoi(timeZone)
+	if err != nil {
+		return dateUTC
+	}
+
+	offsetDuration := time.Hour * time.Duration(offsetHours)
+	result := dateUTC.Add(offsetDuration)
+	return result
 }
