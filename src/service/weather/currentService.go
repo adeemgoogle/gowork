@@ -46,6 +46,15 @@ func (s Service) updateCurrentData(ctx context.Context, location string, current
 		FeelsLike:    rsCurrent.Main.FeelsLike,
 		Date:         date,
 		Timezone:     timezone,
+		Humidity:     rsCurrent.Main.Humidity,
+		Visibility:   rsCurrent.Visibility,
+		WindSpeed:    rsCurrent.Wind.Speed,
+		WindDeg:      rsCurrent.Wind.Deg,
+		Cloud:        rsCurrent.Clouds.All,
+		Rain1h:       rsCurrent.Rain.OneH,
+		Rain3h:       rsCurrent.Rain.ThreeH,
+		Snow1h:       rsCurrent.Snow.OneH,
+		Snow3h:       rsCurrent.Snow.ThreeH,
 		WeatherTypes: weatherTypes,
 	}
 	entity, err = s.weatherRepo.SaveCurrent(entity)
