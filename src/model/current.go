@@ -8,9 +8,9 @@ type Current struct {
 	Temp         float64        `gorm:"not null"`
 	FeelsLike    float64        `gorm:"not null"`
 	Date         time.Time      `gorm:"not null"`
-	WindSpeed	 float64		`gorm:"not null"`
-	WindDeg		float64			`gorm:"not null"`
-	Visibility  int 			`gorm:"visibility"`
+	WindSpeed    float64        `gorm:"not null"`
+	WindDeg      float64        `gorm:"not null"`
+	Visibility   int            `gorm:"not null"`
 	WeatherTypes []*WeatherType `gorm:"many2many:current_weather_types;"`
 }
 

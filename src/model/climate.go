@@ -8,12 +8,12 @@ type Climate struct {
 	Temp         float64        `gorm:"not null"`
 	FeelsLike    float64        `gorm:"not null"`
 	Date         time.Time      `gorm:"not null; index:location_date_index"`
-	Sunrise 	 int64 			`gorm:"not null"`
-	Sunset 		 int64 			`gorm:"not null"`
-	Humidity 	 int 			`gorm:"humidity"`
-	Pressure     int            `gorm:"pressure"`
-	MinTemp		float64 	  	`gorm:"MinTemp"`
-	MaxTemp 	float64 	  	`gorm:"MaxTemp"`
+	Sunrise      int64          `gorm:"not null"`
+	Sunset       int64          `gorm:"not null"`
+	Humidity     int            `gorm:"not null"`
+	Pressure     int            `gorm:"not null"`
+	MinTemp      float64        `gorm:"not null"`
+	MaxTemp      float64        `gorm:"not null"`
 	WeatherTypes []*WeatherType `gorm:"many2many:climate_weather_types"`
 }
 

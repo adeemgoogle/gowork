@@ -7,7 +7,7 @@ type Config struct {
 
 	DBName string `env:"DATABASE_NAME" envDefault:"gowork"`
 	DSName string `env:"DS_NAME" envDefault:"postgres"`
-	DBURL  string `env:"DB_URL" envDefault:"host=localhost user=postgres password=123 dbname=weather port=5432 sslmode=disable"`
+	DBURL  string `env:"DB_URL" envDefault:"postgres://postgres:postgres@localhost:5432/gowork?sslmode=disable"`
 
 	//DBURL  string `env:"DB_URL" envDefault:"postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}?sslmode=disable" envExpand:"true"`
 
