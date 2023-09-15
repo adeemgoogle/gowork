@@ -79,6 +79,15 @@ func buildWeatherDto(current model.Current, hourlies []model.Hourly, climates []
 		Temp:         current.Temp,
 		FeelsLike:    current.FeelsLike,
 		Date:         current.Date,
+		Humidity:     current.Humidity,
+		Visibility:   current.Visibility,
+		WindSpeed:    current.WindSpeed,
+		WindDeg:      current.WindDeg,
+		Cloud:        current.Cloud,
+		Rain1h:       current.Rain1h,
+		Rain3h:       current.Rain3h,
+		Snow1h:       current.Snow1h,
+		Snow3h:       current.Snow3h,
 		WeatherTypes: buildWeatherTypesDto(current.WeatherTypes),
 	}
 
