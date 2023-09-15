@@ -5,9 +5,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+
+	"time"
+
 	"github.com/adeemgoogle/gowork/src/model"
 	"github.com/adeemgoogle/gowork/src/model/integ"
-	"time"
 )
 
 // checkAndGetCurrent - проверка и получения текущих погодных данных
@@ -17,7 +19,7 @@ func (s Service) checkAndGetCurrent(ctx context.Context, location string) (*mode
 		return nil, err
 	}
 
-	if time.Now().Sub(current.Date) < time.Hour {
+	if time.Now().Sub(reconvertDate(current.Date, current.Timezone)) < time.Hour {
 		return &current, nil
 	}
 	return s.updateCurrentData(ctx, location, current)
@@ -35,6 +37,7 @@ func (s Service) updateCurrentData(ctx context.Context, location string, current
 		return nil, err
 	}
 
+	timezone := convertTimezone(rsCurrent.Timezone)
 	date := convertDate(rsCurrent.Dt, rsCurrent.Timezone)
 	entity := model.Current{
 		Id:           current.Id,
@@ -42,6 +45,7 @@ func (s Service) updateCurrentData(ctx context.Context, location string, current
 		Temp:         rsCurrent.Main.Temp,
 		FeelsLike:    rsCurrent.Main.FeelsLike,
 		Date:         date,
+		Timezone:     timezone,
 		WeatherTypes: weatherTypes,
 	}
 	entity, err = s.weatherRepo.SaveCurrent(entity)

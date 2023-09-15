@@ -5,9 +5,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"time"
+
 	"github.com/adeemgoogle/gowork/src/model"
 	"github.com/adeemgoogle/gowork/src/model/integ"
-	"time"
 )
 
 // checkAndGetClimates - проверка и получения прогноза климата на 30 дней
@@ -20,7 +21,7 @@ func (s Service) checkAndGetClimates(ctx context.Context, location string) ([]mo
 	// удаляет старые данные
 	currentDate := time.Now()
 	for _, climate := range climates {
-		if climate.Date.Before(currentDate) {
+		if reconvertDate(climate.Date, climate.Timezone).Before(currentDate) {
 			err = s.weatherRepo.DeleteClimate(climate)
 			if err != nil {
 				return nil, err
@@ -40,6 +41,7 @@ func (s Service) updateClimatesData(ctx context.Context, location string, climat
 
 	lastClimate := findClimateWithMaxDate(climates)
 	for _, r := range rsClimate.List {
+		timezone := convertTimezone(rsClimate.City.Timezone)
 		date := convertDate(r.Dt, rsClimate.City.Timezone)
 
 		if lastClimate != nil {
@@ -54,6 +56,7 @@ func (s Service) updateClimatesData(ctx context.Context, location string, climat
 					Temp:         r.Temp.Day,
 					FeelsLike:    r.FeelsLike.Day,
 					Date:         date,
+					Timezone:     timezone,
 					WeatherTypes: weatherTypes,
 				}
 				_, err = s.weatherRepo.CreateClimate(entity)
@@ -72,6 +75,7 @@ func (s Service) updateClimatesData(ctx context.Context, location string, climat
 				Temp:         r.Temp.Day,
 				FeelsLike:    r.FeelsLike.Day,
 				Date:         date,
+				Timezone:     timezone,
 				WeatherTypes: weatherTypes,
 			}
 			_, err = s.weatherRepo.CreateClimate(entity)
