@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"github.com/adeemgoogle/gowork/src/service/location"
 	"github.com/adeemgoogle/gowork/src/service/user"
 	"io/ioutil"
 	"log"
@@ -53,8 +54,9 @@ func InitHandler(conf config.Config) *handler.Handler {
 	weatherCli := httpClient.NewClient(conf.WeatherBaseURL)
 	weatherSrv := weather.NewService(conf, ds.WeatherRepository(), weatherCli)
 	userSrv := user.NewService(conf, ds.UserRepository())
+	locationSrv := location.NewService(conf, ds.LocationRepository())
 
-	h := handler.NewHandler(weatherSrv, userSrv, conf)
+	h := handler.NewHandler(weatherSrv, userSrv, locationSrv, conf)
 	return h
 }
 
@@ -78,5 +80,6 @@ func InitRouter(h *handler.Handler, production bool) *gin.Engine {
 	apiv1.GET("/weather", h.GetAllWeatherData)
 	apiv1.POST("/user", h.CreateUser)
 	apiv1.GET("/user", h.GetUser)
+	apiv1.GET("/locations", h.GetLocations)
 	return r
 }
