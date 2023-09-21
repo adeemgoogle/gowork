@@ -3,6 +3,7 @@ package postgres
 import (
 	"context"
 	"github.com/adeemgoogle/gowork/src/database/drivers"
+	"github.com/adeemgoogle/gowork/src/database/drivers/postgres/repository/location"
 	"github.com/adeemgoogle/gowork/src/database/drivers/postgres/repository/user"
 	"github.com/adeemgoogle/gowork/src/database/drivers/postgres/repository/weather"
 	"gorm.io/driver/postgres"
@@ -18,9 +19,10 @@ type Postgres struct {
 
 	db *gorm.DB
 
-	connTimeout time.Duration
-	weatherRepo drivers.WeatherRepository
-	userRepo    drivers.UserRepository
+	connTimeout  time.Duration
+	weatherRepo  drivers.WeatherRepository
+	userRepo     drivers.UserRepository
+	locationRepo drivers.LocationRepository
 }
 
 func New(config drivers.Config) *Postgres {
@@ -71,4 +73,12 @@ func (p *Postgres) UserRepository() drivers.UserRepository {
 	}
 
 	return p.userRepo
+}
+
+func (p *Postgres) LocationRepository() drivers.LocationRepository {
+	if p.locationRepo == nil {
+		p.locationRepo = location.NewRepository(p.db)
+	}
+
+	return p.locationRepo
 }
