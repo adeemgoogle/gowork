@@ -7,7 +7,7 @@ import (
 
 func (p *Postgres) RunMigrations() error {
 	err := p.db.AutoMigrate(model.WeatherType{}, model.Current{}, model.Hourly{}, model.Climate{},
-		model.CurrentWeatherType{}, model.HourlyWeatherType{}, model.ClimateWeatherType{})
+		model.CurrentWeatherType{}, model.HourlyWeatherType{}, model.ClimateWeatherType{}, model.User{})
 	if err != nil {
 		log.Fatal("failed to migrate db", err)
 		return err
