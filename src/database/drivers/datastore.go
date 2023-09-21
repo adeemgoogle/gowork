@@ -11,6 +11,7 @@ type Base interface {
 	Close() error
 	RunMigrations() error
 	WeatherRepository() WeatherRepository
+	UserRepository() UserRepository
 }
 
 type DataStore interface {
@@ -31,4 +32,9 @@ type WeatherRepository interface {
 	GetClimatesByLocation(location string) ([]model.Climate, error)
 	CreateClimate(hourly model.Climate) (model.Climate, error)
 	DeleteClimate(hourly model.Climate) error
+}
+
+type UserRepository interface {
+	CreateUser(user model.User) (model.User, error)
+	GetUserByDeviceId(deviceId string) (model.User, error)
 }

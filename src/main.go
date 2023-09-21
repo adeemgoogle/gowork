@@ -2,6 +2,12 @@ package main
 
 import (
 	"context"
+	"github.com/adeemgoogle/gowork/src/service/user"
+	"io/ioutil"
+	"log"
+	"os/signal"
+	"syscall"
+
 	httpClient "github.com/adeemgoogle/gowork/src/common/http"
 	"github.com/adeemgoogle/gowork/src/config"
 	"github.com/adeemgoogle/gowork/src/database"
@@ -10,10 +16,6 @@ import (
 	"github.com/adeemgoogle/gowork/src/service/weather"
 	"github.com/caarlos0/env"
 	"github.com/gin-gonic/gin"
-	"io/ioutil"
-	"log"
-	"os/signal"
-	"syscall"
 )
 
 // main - основная функция
@@ -50,8 +52,9 @@ func InitHandler(conf config.Config) *handler.Handler {
 
 	weatherCli := httpClient.NewClient(conf.WeatherBaseURL)
 	weatherSrv := weather.NewService(conf, ds.WeatherRepository(), weatherCli)
+	userSrv := user.NewService(conf, ds.UserRepository())
 
-	h := handler.NewHandler(weatherSrv, conf)
+	h := handler.NewHandler(weatherSrv, userSrv, conf)
 	return h
 }
 
@@ -73,6 +76,7 @@ func InitRouter(h *handler.Handler, production bool) *gin.Engine {
 	// группа /api/v1 содержит ендпойнты первой версии
 	apiv1 := r.Group("/api/v1")
 	apiv1.GET("/weather", h.GetAllWeatherData)
-
+	apiv1.POST("/user", h.CreateUser)
+	apiv1.GET("/user", h.GetUser)
 	return r
 }
