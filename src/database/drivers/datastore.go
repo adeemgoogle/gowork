@@ -42,4 +42,5 @@ type UserRepository interface {
 
 type LocationRepository interface {
 	GetLocations() ([]model.Location, error)
+	GetLocationById(id int64) (model.Location, error)
 }

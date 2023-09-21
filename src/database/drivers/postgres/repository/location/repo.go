@@ -23,3 +23,12 @@ func (r Repository) GetLocations() ([]model.Location, error) {
 
 	return entities, nil
 }
+
+func (r Repository) GetLocationById(id int64) (model.Location, error) {
+	var entity model.Location
+	if err := r.db.Where("id = ?", id).Find(&entity).Error; err != nil {
+		return model.Location{}, err
+	}
+
+	return entity, nil
+}

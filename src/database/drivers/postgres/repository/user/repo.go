@@ -25,7 +25,7 @@ func (r Repository) CreateUser(entity model.User) (model.User, error) {
 
 func (r Repository) GetUserByDeviceId(deviceId string) (model.User, error) {
 	var entity model.User
-	if err := r.db.Where("device_id = ?", deviceId).Find(&entity).Error; err != nil {
+	if err := r.db.Preload("Locations").Where("device_id = ?", deviceId).Find(&entity).Error; err != nil {
 		return model.User{}, err
 	}
 
